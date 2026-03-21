@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rumies — Kom i gang</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20,400,1,0" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #F7F4EF;
+    --card: #FFFFFF;
+    --primary: #D97757;
+    --primary-hover: #C4633F;
+    --primary-soft: #F5E6DF;
+    --accent: #7B9E87;
+    --accent-soft: #E3EEE7;
+    --ink: #1A0F0A;
+    --ink2: #4A3528;
+    --ink3: #9C7B6E;
+    --border: #E8E0D8;
+    --gold: #C9A84C;
+    --gold-soft: #F5EDD0;
+    --shadow-sm: 0 1px 4px rgba(26,15,10,0.06);
+    --shadow-md: 0 4px 20px rgba(26,15,10,0.08);
+    --shadow-lg: 0 12px 40px rgba(26,15,10,0.10);
+    --r: 20px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Manrope', sans-serif;
+    background: var(--bg);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: var(--ink);
+  }
+
+  /* TOP NAV */
+  .topnav {
+    width: 100%;
+    padding: 20px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 50;
+    background: rgba(247,244,239,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.3s;
+  }
+
+  .logo {
+    display: flex; align-items: center; gap: 9px;
+    text-decoration: none;
+  }
+  .logo svg { width: 28px; height: 28px; }
+  .logo-text {
+    font-family: 'Fraunces', serif;
+    font-size: 20px; font-weight: 700;
+    color: var(--ink); letter-spacing: -0.3px;
+  }
+
+  .nav-login {
+    font-size: 14px; font-weight: 600;
+    color: var(--ink2); text-decoration: none;
+    padding: 8px 18px; border-radius: 999px;
+    border: 1.5px solid var(--border);
+    background: var(--card);
+    transition: all 0.2s;
+  }
+  .nav-login:hover { border-color: var(--ink2); }
+
+  /* MAIN STAGE */
+  .stage {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 100px 20px 60px;
+  }
+
+  /* SCREEN — each step */
+  .screen {
+    display: none;
+    width: 100%;
+    max-width: 560px;
+    animation: screenIn 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  .screen.active { display: block; }
+
+  @keyframes screenIn {
+    from { opacity: 0; transform: translateY(22px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes screenOut {
+    from { opacity: 1; transform: translateY(0); }
+    to   { opacity: 0; transform: translateY(-12px); }
+  }
+  @keyframes quizSlideIn {
+    from { opacity: 0; transform: translateX(32px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes quizSlideBack {
+    from { opacity: 0; transform: translateX(-32px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+  .quiz-animate-fwd  { animation: quizSlideIn  0.32s cubic-bezier(0.22, 1, 0.36, 1) both; }
+  .quiz-animate-back { animation: quizSlideBack 0.32s cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+  /* STEP INDICATOR */
+  .step-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin-bottom: 32px;
+  }
+
+  .step-dot {
+    width: 8px; height: 8px;
+    border-radius: 999px;
+    background: var(--border);
+    transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .step-dot.active { background: var(--primary); width: 24px; }
+  .step-dot.done   { background: var(--accent); }
+
+  /* SCREEN HEADER */
+  .screen-label {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--primary);
+    margin-bottom: 8px;
+  }
+
+  .screen-title {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(26px, 5vw, 36px);
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.15;
+    margin-bottom: 10px;
+  }
+
+  .screen-title em { font-style: italic; color: var(--primary); }
+
+  .screen-sub {
+    font-size: 15px;
+    color: var(--ink3);
+    line-height: 1.6;
+    margin-bottom: 32px;
+  }
+
+  /* ROLE CARDS */
+  .role-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+
+  .role-card {
+    background: var(--card);
+    border: 2px solid var(--border);
+    border-radius: var(--r);
+    padding: 28px 20px;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .role-card:hover {
+    border-color: var(--primary);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+  }
+  .role-card.selected {
+    border-color: var(--primary);
+    background: var(--primary-soft);
+    box-shadow: 0 0 0 4px rgba(217,119,87,0.12);
+  }
+  .role-card.selected .role-check { opacity: 1; transform: scale(1); }
+
+  .role-icon {
+    width: 56px; height: 56px;
+    border-radius: 16px;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 14px;
+    font-size: 26px;
+    background: var(--bg);
+    transition: background 0.2s;
+  }
+  .role-card.selected .role-icon { background: var(--primary); }
+  .role-card.selected .role-icon span { filter: brightness(10); }
+
+  .role-icon .material-symbols-rounded { font-size: 28px; color: var(--primary); }
+  .role-card.selected .role-icon .material-symbols-rounded { color: white; }
+
+  .role-name {
+    font-family: 'Fraunces', serif;
+    font-size: 18px; font-weight: 600;
+    color: var(--ink); margin-bottom: 6px;
+  }
+  .role-desc { font-size: 13px; color: var(--ink3); line-height: 1.5; }
+
+  .role-check {
+    position: absolute; top: 12px; right: 12px;
+    width: 22px; height: 22px;
+    background: var(--primary); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; transform: scale(0.5);
+    transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .role-check .material-symbols-rounded { font-size: 14px; color: white; }
+
+  /* QUIZ OPTIONS */
+  .quiz-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 28px;
+  }
+
+  .quiz-option {
+    background: var(--card);
+    border: 2px solid var(--border);
+    border-radius: 16px;
+    padding: 16px 20px;
+    display: flex; align-items: center; gap: 16px;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+    text-align: left;
+    width: 100%;
+    font-family: 'Manrope', sans-serif;
+  }
+  .quiz-option:hover { border-color: var(--primary); box-shadow: var(--shadow-sm); transform: translateX(3px); }
+  .quiz-option.selected { border-color: var(--primary); background: var(--primary-soft); }
+
+  .quiz-opt-icon {
+    width: 44px; height: 44px; flex-shrink: 0;
+    border-radius: 12px;
+    background: var(--bg);
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s;
+  }
+  .quiz-opt-icon .material-symbols-rounded { font-size: 22px; color: var(--primary); }
+  .quiz-option.selected .quiz-opt-icon { background: var(--primary); }
+  .quiz-option.selected .quiz-opt-icon .material-symbols-rounded { color: white; }
+
+  .quiz-opt-text {}
+  .quiz-opt-title { font-size: 15px; font-weight: 600; color: var(--ink); margin-bottom: 2px; }
+  .quiz-opt-sub   { font-size: 12px; color: var(--ink3); }
+
+  /* PROGRESS BAR */
+  .progress-wrap {
+    margin-bottom: 28px;
+  }
+  .progress-row {
+    display: flex; justify-content: space-between;
+    font-size: 12px; font-weight: 600;
+    color: var(--ink3); margin-bottom: 8px;
+  }
+  .progress-row span:first-child { color: var(--primary); text-transform: uppercase; letter-spacing: 0.06em; }
+  .progress-track {
+    height: 6px; background: var(--border); border-radius: 999px; overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%; background: var(--primary); border-radius: 999px;
+    transition: width 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  /* FORM FIELDS */
+  .form-grid { display: flex; flex-direction: column; gap: 16px; margin-bottom: 28px; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+  .field-group { display: flex; flex-direction: column; gap: 6px; }
+  .field-label {
+    font-size: 12px; font-weight: 700;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--ink2);
+  }
+
+  .field-input {
+    padding: 13px 16px;
+    border-radius: 12px;
+    border: 2px solid var(--border);
+    background: var(--card);
+    font-size: 15px; font-weight: 500;
+    color: var(--ink);
+    font-family: 'Manrope', sans-serif;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    width: 100%;
+  }
+  .field-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(217,119,87,0.12); }
+  .field-input::placeholder { color: var(--ink3); }
+
+  .field-prefix {
+    position: relative;
+  }
+  .field-prefix .field-input { padding-left: 44px; }
+  .field-prefix-label {
+    position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+    font-size: 14px; font-weight: 600; color: var(--ink3);
+    pointer-events: none;
+  }
+
+  /* IMAGE UPLOAD */
+  .upload-zone {
+    border: 2px dashed var(--border);
+    border-radius: 16px;
+    padding: 32px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: var(--card);
+    position: relative;
+  }
+  .upload-zone:hover { border-color: var(--primary); background: var(--primary-soft); }
+  .upload-zone.has-files { border-style: solid; border-color: var(--accent); background: var(--accent-soft); }
+
+  .upload-icon .material-symbols-rounded { font-size: 36px; color: var(--ink3); margin-bottom: 10px; }
+  .upload-zone.has-files .upload-icon .material-symbols-rounded { color: var(--accent); }
+
+  .upload-title { font-size: 15px; font-weight: 600; color: var(--ink2); margin-bottom: 4px; }
+  .upload-sub { font-size: 13px; color: var(--ink3); }
+  .upload-input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+
+  .upload-previews {
+    display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; justify-content: center;
+  }
+  .upload-thumb {
+    width: 72px; height: 72px; border-radius: 10px; object-fit: cover;
+    border: 2px solid var(--accent-soft);
+  }
+
+  /* CARD */
+  .card {
+    background: var(--card);
+    border-radius: var(--r);
+    border: 1px solid var(--border);
+    padding: 32px;
+    box-shadow: var(--shadow-md);
+  }
+
+  /* BUTTONS */
+  .btn-primary {
+    width: 100%; padding: 16px;
+    background: var(--primary); color: white;
+    border: none; border-radius: 14px;
+    font-size: 16px; font-weight: 700;
+    font-family: 'Manrope', sans-serif;
+    cursor: pointer; transition: all 0.2s;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  .btn-primary:hover { background: var(--primary-hover); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(217,119,87,0.3); }
+  .btn-primary:active { transform: translateY(0); }
+  .btn-primary:disabled { background: var(--border); color: var(--ink3); cursor: not-allowed; transform: none; box-shadow: none; }
+  .btn-primary .material-symbols-rounded { font-size: 20px; }
+
+  .btn-back {
+    display: flex; align-items: center; gap: 6px;
+    background: none; border: none;
+    font-size: 14px; font-weight: 600; color: var(--ink3);
+    cursor: pointer; padding: 8px 0;
+    font-family: 'Manrope', sans-serif;
+    transition: color 0.2s; margin-bottom: 24px;
+  }
+  .btn-back:hover { color: var(--ink); }
+  .btn-back .material-symbols-rounded { font-size: 18px; }
+
+  /* TRUST LINE */
+  .trust-line {
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+    font-size: 12px; color: var(--ink3); margin-top: 20px;
+  }
+  .trust-line .material-symbols-rounded { font-size: 15px; }
+
+  /* SUCCESS SCREEN */
+  .success-icon {
+    width: 80px; height: 80px; border-radius: 50%;
+    background: var(--accent-soft);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 24px;
+    animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  }
+  .success-icon .material-symbols-rounded { font-size: 40px; color: var(--accent); }
+  @keyframes popIn {
+    from { transform: scale(0.5); opacity: 0; }
+    to   { transform: scale(1);   opacity: 1; }
+  }
+
+  .summary-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 28px;
+  }
+  .summary-item {
+    background: var(--bg); border-radius: 12px; padding: 14px 16px;
+    border: 1px solid var(--border);
+  }
+  .summary-item-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink3); margin-bottom: 4px; }
+  .summary-item-val   { font-size: 15px; font-weight: 600; color: var(--ink); }
+  .summary-item-val.primary { color: var(--primary); }
+
+  /* QUIZ CATEGORY TAG */
+  .quiz-category {
+    display: inline-flex; align-items: center; gap: 5px;
+    background: var(--gold-soft); color: var(--gold);
+    font-size: 11px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.07em;
+    padding: 4px 10px; border-radius: 999px;
+    margin-bottom: 12px;
+  }
+  .quiz-category .material-symbols-rounded { font-size: 13px; }
+
+  @media (max-width: 500px) {
+    .role-grid { grid-template-columns: 1fr; }
+    .form-row  { grid-template-columns: 1fr; }
+    .summary-grid { grid-template-columns: 1fr; }
+    .topnav { padding: 16px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<nav class="topnav">
+  <a class="logo" href="rumies-landing.html">
+    <svg viewBox="0 0 28 28" fill="none">
+      <polygon points="14,2 26,24 2,24" fill="#D97757"/>
+      <polygon points="14,7 23,22 5,22" fill="#F7F4EF" opacity="0.3"/>
+    </svg>
+    <span class="logo-text">Rumies</span>
+  </a>
+  <a class="nav-login" href="rumies-matches.html">Log ind</a>
+</nav>
+
+<div class="stage">
+  <div style="width:100%;max-width:560px">
+
+    <!-- ─── STEP 1: ROLE ─────────────────────────────────────── -->
+    <div class="screen active" id="step-role">
+      <div class="step-indicator" id="dots-role"></div>
+
+      <div class="screen-label">Kom i gang</div>
+      <h1 class="screen-title">Hvem er du på<br><em>Rumies?</em></h1>
+      <p class="screen-sub">Vælg din rolle, så tilpasser vi oplevelsen til dig.</p>
+
+      <div class="role-grid">
+        <div class="role-card" onclick="selectRole('udlejer', this)">
+          <div class="role-check"><span class="material-symbols-rounded">check</span></div>
+          <div class="role-icon"><span class="material-symbols-rounded">home</span></div>
+          <div class="role-name">Jeg har en lejlighed</div>
+          <div class="role-desc">Du søger den rette roomie til dit hjem</div>
+        </div>
+        <div class="role-card" onclick="selectRole('søgende', this)">
+          <div class="role-check"><span class="material-symbols-rounded">check</span></div>
+          <div class="role-icon"><span class="material-symbols-rounded">search</span></div>
+          <div class="role-name">Jeg søger en plads</div>
+          <div class="role-desc">Du leder efter det perfekte sted at bo</div>
+        </div>
+      </div>
+
+      <button class="btn-primary" id="btn-role" disabled onclick="goToQuiz()">
+        Fortsæt <span class="material-symbols-rounded">arrow_forward</span>
+      </button>
+      <div class="trust-line">
+        <span class="material-symbols-rounded">lock</span>
+        Dine oplysninger deles kun med verificerede matches
+      </div>
+    </div>
+
+    <div class="screen" id="step-quiz">
+      <button class="btn-back" onclick="goBack()">
+        <span class="material-symbols-rounded">arrow_back</span> Tilbage
+      </button>
+
+      <div class="progress-wrap">
+        <div class="progress-row">
+          <span id="quiz-cat-label">Søvnvaner</span>
+          <span id="quiz-progress-txt">Spørgsmål 1 af 12</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" id="quiz-bar" style="width:0%"></div>
+        </div>
+        <div style="text-align:right;font-size:11px;color:var(--ink3);margin-top:5px" id="quiz-cat-step">Kategori 1 af 6</div>
+      </div>
+
+      <div id="quiz-inner">
+        <div class="quiz-category" id="quiz-cat-badge">
+          <span class="material-symbols-rounded">category</span>
+          <span id="quiz-cat-badge-txt">Søvnvaner</span>
+        </div>
+
+        <h2 class="screen-title" id="quiz-question"></h2>
+        <p class="screen-sub" id="quiz-sub"></p>
+
+        <div class="quiz-options" id="quiz-options"></div>
+      </div>
+
+      <button class="btn-primary" id="btn-quiz" disabled onclick="nextQuiz()">
+        Næste <span class="material-symbols-rounded">arrow_forward</span>
+      </button>
+    </div>
+
+    <!-- ─── STEP 3a: UDLEJER INFO ─────────────────────────────── -->
+    <div class="screen" id="step-udlejer">
+      <button class="btn-back" onclick="goBackFromInfo()">
+        <span class="material-symbols-rounded">arrow_back</span> Tilbage
+      </button>
+
+      <div class="step-indicator" id="dots-info"></div>
+
+      <div class="screen-label">Om din lejlighed</div>
+      <h2 class="screen-title">Fortæl om dit <em>hjem</em></h2>
+      <p class="screen-sub">Disse informationer vises på din profil og bruges til at matche den rigtige roomie.</p>
+
+      <div class="form-grid">
+        <div class="field-group">
+          <label class="field-label">Vejnavn og husnummer</label>
+          <input class="field-input" type="text" placeholder="f.eks. Nørrebrogade 42" id="addr-street">
+        </div>
+        <div class="form-row">
+          <div class="field-group">
+            <label class="field-label">By</label>
+            <input class="field-input" type="text" placeholder="f.eks. København N" id="addr-city">
+          </div>
+          <div class="field-group">
+            <label class="field-label">Postnummer</label>
+            <input class="field-input" type="text" placeholder="2200" id="addr-zip" maxlength="4">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="field-group">
+            <label class="field-label">Husleje pr. måned</label>
+            <div class="field-prefix">
+              <span class="field-prefix-label">kr.</span>
+              <input class="field-input" type="number" placeholder="6.500" id="rent" min="1000" max="30000">
+            </div>
+          </div>
+        <div class="form-row">
+          <div class="field-group">
+            <label class="field-label">Størrelse på værelse</label>
+            <div class="field-prefix">
+              <span class="field-prefix-label" style="left:auto;right:14px;transform:translateY(-50%)">m²</span>
+              <input class="field-input" type="number" placeholder="18" id="size-room" min="5" max="100" style="padding-right:44px">
+            </div>
+          </div>
+          <div class="field-group">
+            <label class="field-label">Lejlighedens størrelse</label>
+            <div class="field-prefix">
+              <span class="field-prefix-label" style="left:auto;right:14px;transform:translateY(-50%)">m²</span>
+              <input class="field-input" type="number" placeholder="72" id="size-total" min="20" max="500" style="padding-right:44px">
+            </div>
+          </div>
+        </div>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Billeder af lejligheden</label>
+          <div class="upload-zone" id="upload-zone">
+            <input type="file" class="upload-input" accept="image/*" multiple onchange="handleUpload(this)">
+            <div class="upload-icon"><span class="material-symbols-rounded">add_photo_alternate</span></div>
+            <div class="upload-title">Upload billeder</div>
+            <div class="upload-sub">Træk og slip, eller klik for at vælge · Maks. 8 billeder</div>
+            <div class="upload-previews" id="upload-previews"></div>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn-primary" onclick="goToSuccess()">
+        Opret profil <span class="material-symbols-rounded">check</span>
+      </button>
+    </div>
+
+    <!-- ─── STEP 3b: SØGENDE INFO ─────────────────────────────── -->
+    <div class="screen" id="step-søgende">
+      <button class="btn-back" onclick="goBackFromInfo()">
+        <span class="material-symbols-rounded">arrow_back</span> Tilbage
+      </button>
+
+      <div class="screen-label">Dine præferencer</div>
+      <h2 class="screen-title">Hvad leder du <em>efter?</em></h2>
+      <p class="screen-sub">Vi bruger dette til at matche dig med lejligheder der passer til dit budget og ønskede by.</p>
+
+      <div class="form-grid">
+        <div class="field-group">
+          <label class="field-label">Hvilken by søger du i?</label>
+          <input class="field-input" type="text" placeholder="f.eks. København, Aarhus, Odense..." id="search-city">
+        </div>
+        <div class="form-row">
+          <div class="field-group">
+            <label class="field-label">Mindste budget</label>
+            <div class="field-prefix">
+              <span class="field-prefix-label">kr.</span>
+              <input class="field-input" type="number" placeholder="3.000" id="budget-min">
+            </div>
+          </div>
+          <div class="field-group">
+            <label class="field-label">Højeste budget</label>
+            <div class="field-prefix">
+              <span class="field-prefix-label">kr.</span>
+              <input class="field-input" type="number" placeholder="7.500" id="budget-max">
+            </div>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Hvornår er du klar til at flytte?</label>
+          <div style="position:relative">
+            <input class="field-input" type="date" id="move-date" style="padding-left:44px">
+            <span class="material-symbols-rounded" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--ink3);font-size:20px">calendar_today</span>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn-primary" onclick="goToSuccess()">
+        Opret profil <span class="material-symbols-rounded">check</span>
+      </button>
+    </div>
+
+    <!-- ─── SUCCESS ───────────────────────────────────────────── -->
+    <div class="screen" id="step-success">
+      <div class="card" style="text-align:center">
+        <div class="success-icon">
+          <span class="material-symbols-rounded">celebration</span>
+        </div>
+        <h2 class="screen-title" style="margin-bottom:8px">Din profil er klar! 🎉</h2>
+        <p class="screen-sub" style="margin-bottom:24px">Her er et overblik over hvad vi matcher dig ud fra:</p>
+
+        <div class="summary-grid" id="summary-grid"></div>
+
+        <div style="background:var(--bg);border-radius:14px;padding:16px 18px;border:1px solid var(--border);margin-bottom:24px;text-align:left">
+          <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--ink3);margin-bottom:10px">Din livsstilsprofil</div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px" id="lifestyle-tags"></div>
+        </div>
+
+        <button class="btn-primary" onclick="window.location='rumies-matches.html'">
+          Gå til mine matches <span class="material-symbols-rounded">arrow_forward</span>
+        </button>
+        <div class="trust-line" style="margin-top:16px">
+          <span class="material-symbols-rounded">shield</span>
+          Din profil er kun synlig for verificerede brugere
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ── STATE ──────────────────────────────────────────────────────
+let role = null;
+let quizAnswers = {};
+let currentQ = 0;
+
+// ── QUIZ DATA — 12 spørgsmål, 6 kategorier ────────────────────
+const QUIZ = [
+  // ── SØVNVANER (2) ──
+  {
+    cat: "Søvnvaner", catIcon: "bedtime",
+    q: "Hvornår vågner du normalt op på hverdage?",
+    sub: "Din morgenrytme er en af de vigtigste faktorer i et godt roomie-match.",
+    opts: [
+      { icon: "wb_twilight",  title: "Tidlig fugl",    sub: "Oppe inden kl. 7",             val: "early" },
+      { icon: "wb_sunny",     title: "Morgenmenneske", sub: "Oppe kl. 7–9",                 val: "morning" },
+      { icon: "schedule",     title: "Formiddagstype", sub: "Oppe kl. 9–11",                val: "mid" },
+      { icon: "nights_stay",  title: "Natteravn",      sub: "Oppe efter kl. 11 eller senere",val: "night" },
+    ]
+  },
+  {
+    cat: "Søvnvaner", catIcon: "bedtime",
+    q: "Hvornår går du typisk i seng?",
+    sub: "En roomie med samme sengetid giver ro til begge parter.",
+    opts: [
+      { icon: "bedtime",      title: "Inden 22:00",    sub: "Tidlig sengetid",               val: "early-bed" },
+      { icon: "dark_mode",    title: "22–24",          sub: "Gennemsnitlig sengetid",         val: "avg-bed" },
+      { icon: "local_bar",    title: "Sent",           sub: "Ofte oppe efter midnat",         val: "late-bed" },
+    ]
+  },
+
+  // ── RYDDELIGHED (2) ──
+  {
+    cat: "Ryddelighed", catIcon: "cleaning_services",
+    q: "Hvor ryddeligt foretrækker du, der er derhjemme?",
+    sub: "Uenighed om ryddelighed er den hyppigste årsag til roomie-konflikter.",
+    opts: [
+      { icon: "cleaning_services", title: "Meget ryddeligt",    sub: "Altid rent og organiseret",     val: "very-clean" },
+      { icon: "check_circle",      title: "Rimeligt ryddeligt", sub: "Rydder op jævnligt",            val: "clean" },
+      { icon: "sentiment_neutral", title: "Afslappet",          sub: "Lever fint med lidt rod",       val: "relaxed" },
+    ]
+  },
+  {
+    cat: "Ryddelighed", catIcon: "cleaning_services",
+    q: "Hvordan forholder du dig til fællesarealer som køkken og bad?",
+    sub: "Fællesarealer kræver fælles forventninger.",
+    opts: [
+      { icon: "kitchen",      title: "Rengør straks",  sub: "Vasker op og rydder op med det samme",  val: "clean-now" },
+      { icon: "event_available", title: "Inden for dagen", sub: "Rydder op samme dag",              val: "clean-today" },
+      { icon: "calendar_month",  title: "Ugentlig runde", sub: "Foretrækker en fast ugentlig plan",  val: "clean-weekly" },
+    ]
+  },
+
+  // ── GÆSTER & FESTER (2) ──
+  {
+    cat: "Gæster & fester", catIcon: "celebration",
+    q: "Hvor ofte har du venner eller gæster forbi?",
+    sub: "Så vi matcher dig med nogen der deler din sociale energi.",
+    opts: [
+      { icon: "groups",       title: "Ofte",           sub: "Næsten hver uge",               val: "social-high" },
+      { icon: "people",       title: "Af og til",      sub: "Et par gange om måneden",       val: "social-mid" },
+      { icon: "person",       title: "Sjældent",       sub: "Foretrækker rolige aftener",    val: "social-low" },
+    ]
+  },
+  {
+    cat: "Gæster & fester", catIcon: "celebration",
+    q: "Hvordan har du det med spontane fester eller støjende aftener?",
+    sub: "Ærlighed her sparer mange akavet samtaler senere.",
+    opts: [
+      { icon: "celebration",  title: "Elsker det",     sub: "Jo mere fest, jo bedre",        val: "party-yes" },
+      { icon: "thumb_up",     title: "Fint af og til", sub: "Men gerne med lidt varsel",     val: "party-sometimes" },
+      { icon: "do_not_disturb", title: "Nej tak",      sub: "Foretrækker ro og forudsigelighed", val: "party-no" },
+    ]
+  },
+
+  // ── RYGER & KÆLEDYR (2) ──
+  {
+    cat: "Ryger & kæledyr", catIcon: "pets",
+    q: "Ryger du?",
+    sub: "Vigtigt for dem med allergi eller præferencer for røgfrit miljø.",
+    opts: [
+      { icon: "smoking_rooms", title: "Ja, indendørs",  sub: "Ryger indenfor",               val: "smoker-in" },
+      { icon: "outdoor_garden",title: "Ja, udendørs",   sub: "Ryger kun udenfor",             val: "smoker-out" },
+      { icon: "smoke_free",    title: "Ikke-ryger",     sub: "Ryger ikke",                    val: "non-smoker" },
+    ]
+  },
+  {
+    cat: "Ryger & kæledyr", catIcon: "pets",
+    q: "Har du eller ønsker du kæledyr?",
+    sub: "Allergier og præferencer spiller en stor rolle i hverdagen.",
+    opts: [
+      { icon: "pets",          title: "Ja, har kæledyr",     sub: "Jeg har et eller flere dyr",   val: "has-pet" },
+      { icon: "favorite",      title: "Vil gerne have",      sub: "Planlægger at skaffe et dyr",  val: "wants-pet" },
+      { icon: "block",         title: "Ingen kæledyr",       sub: "Foretrækker et kæledyrsfrit hjem", val: "no-pet" },
+    ]
+  },
+
+  // ── MAD & KØKKEN (2) ──
+  {
+    cat: "Mad & køkken", catIcon: "restaurant",
+    q: "Hvordan bruger du køkkenet?",
+    sub: "Delt køkken kræver enighed om vaner og renlighed.",
+    opts: [
+      { icon: "restaurant",    title: "Laver mad hver dag",   sub: "Elsker at lave mad",          val: "cook-daily" },
+      { icon: "local_dining",  title: "Laver mad jævnligt",   sub: "Nogle dage om ugen",          val: "cook-often" },
+      { icon: "takeout_dining",title: "Mest takeaway",        sub: "Sjældent i køkkenet",         val: "cook-rarely" },
+    ]
+  },
+  {
+    cat: "Mad & køkken", catIcon: "restaurant",
+    q: "Har du særlige kostpræferencer?",
+    sub: "Kan være relevant for delt indkøb og maddage.",
+    opts: [
+      { icon: "eco",           title: "Vegetar/veganer",      sub: "Spiser ikke kød",              val: "vegetarian" },
+      { icon: "set_meal",      title: "Fleksitarier",         sub: "Mest plantebaseret, men fleksibel", val: "flexiterian" },
+      { icon: "lunch_dining",  title: "Altesspiser",          sub: "Spiser alt",                   val: "omnivore" },
+    ]
+  },
+
+  // ── HJEMMELIV (2) ──
+  {
+    cat: "Hjemmeliv", catIcon: "home",
+    q: "Hvor meget tid tilbringer du hjemme på en typisk hverdag?",
+    sub: "Hjælper os finde nogen du trives med i dagligdagen.",
+    opts: [
+      { icon: "laptop_mac",    title: "Det meste af dagen",   sub: "Arbejder/studerer hjemmefra",  val: "homebody" },
+      { icon: "directions_run",title: "Mest ude",             sub: "Hjemme primært til at sove",   val: "active" },
+      { icon: "balance",       title: "Mix",                  sub: "Lidt af begge",                val: "mix" },
+    ]
+  },
+  {
+    cat: "Hjemmeliv", catIcon: "home",
+    q: "Hvad er vigtigst for dig i et godt roomie-forhold?",
+    sub: "Det her giver os det bedste billede af dig som roomie.",
+    opts: [
+      { icon: "handshake",     title: "Respekt og privatliv", sub: "Lukkede døre og egne rytmer",  val: "respect" },
+      { icon: "diversity_3",   title: "Fællesskab",           sub: "Hygge, middage og samvær",     val: "community" },
+      { icon: "emoji_people",  title: "Begge dele",           sub: "Fleksibel alt efter humør",    val: "balanced" },
+    ]
+  },
+];
+
+// lifestyle label mapping
+const LABELS = {
+  early: "Tidlig fugl", morning: "Morgenmenneske", mid: "Formiddagstype", night: "Natteravn",
+  "early-bed": "Sov inden 22", "avg-bed": "Sov kl. 22–24", "late-bed": "Sent i seng",
+  "very-clean": "Meget ryddelig", clean: "Ryddelig", relaxed: "Afslappet ryddelighed",
+  "clean-now": "Rydder straks op", "clean-today": "Rydder op samme dag", "clean-weekly": "Ugentlig rengøring",
+  "social-high": "Social", "social-mid": "Afbalanceret social", "social-low": "Rolige aftener",
+  "party-yes": "Festglad", "party-sometimes": "Fest af og til", "party-no": "Foretrækker ro",
+  "smoker-in": "Ryger indendørs", "smoker-out": "Ryger udendørs", "non-smoker": "Ikke-ryger",
+  "has-pet": "Har kæledyr", "wants-pet": "Vil have kæledyr", "no-pet": "Ingen kæledyr",
+  "cook-daily": "Madentusiast", "cook-often": "Laver mad jævnligt", "cook-rarely": "Takeaway-fan",
+  vegetarian: "Vegetar/veganer", flexiterian: "Fleksitarier", omnivore: "Altesspiser",
+  homebody: "Hjemme-type", active: "Aktiv livsstil", mix: "Fleksibel",
+  respect: "Respektfuld roomie", community: "Fællesskabsorienteret", balanced: "Afbalanceret",
+};
+
+// ── DOTS ───────────────────────────────────────────────────────
+function renderDots(containerId, total, active) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  el.innerHTML = '';
+  for (let i = 0; i < total; i++) {
+    const d = document.createElement('div');
+    d.className = 'step-dot' + (i === active ? ' active' : i < active ? ' done' : '');
+    el.appendChild(d);
+  }
+}
+
+// ── ROLE SELECTION ─────────────────────────────────────────────
+function selectRole(r, card) {
+  role = r;
+  document.querySelectorAll('.role-card').forEach(c => c.classList.remove('selected'));
+  card.classList.add('selected');
+  document.getElementById('btn-role').disabled = false;
+}
+
+// ── TRANSITIONS ────────────────────────────────────────────────
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  const el = document.getElementById(id);
+  el.classList.add('active');
+  el.style.animation = 'none';
+  el.offsetHeight; // reflow
+  el.style.animation = '';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ── QUIZ FLOW ──────────────────────────────────────────────────
+function goToQuiz() {
+  currentQ = 0;
+  renderDots('dots-role', QUIZ.length + 2, 1);
+  showScreen('step-quiz');
+  renderQuizQuestion('fwd');
+}
+
+function renderQuizQuestion(dir = 'fwd') {
+  const q = QUIZ[currentQ];
+
+  // Animate the inner quiz content
+  const inner = document.getElementById('quiz-inner');
+  inner.classList.remove('quiz-animate-fwd', 'quiz-animate-back');
+  void inner.offsetWidth; // reflow
+  inner.classList.add(dir === 'fwd' ? 'quiz-animate-fwd' : 'quiz-animate-back');
+
+  document.getElementById('quiz-cat-label').textContent = q.cat;
+  document.getElementById('quiz-cat-badge-txt').textContent = q.cat;
+  document.querySelector('#quiz-cat-badge .material-symbols-rounded').textContent = q.catIcon;
+  document.getElementById('quiz-progress-txt').textContent = `Spørgsmål ${currentQ + 1} af ${QUIZ.length}`;
+  document.getElementById('quiz-bar').style.width = `${((currentQ) / QUIZ.length) * 100}%`;
+  document.getElementById('quiz-question').textContent = q.q;
+  document.getElementById('quiz-sub').textContent = q.sub;
+
+  const container = document.getElementById('quiz-options');
+  container.innerHTML = '';
+  q.opts.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'quiz-option' + (quizAnswers[currentQ] === opt.val ? ' selected' : '');
+    btn.innerHTML = `
+      <div class="quiz-opt-icon"><span class="material-symbols-rounded">${opt.icon}</span></div>
+      <div class="quiz-opt-text">
+        <div class="quiz-opt-title">${opt.title}</div>
+        <div class="quiz-opt-sub">${opt.sub}</div>
+      </div>`;
+    btn.onclick = () => selectQuizOption(opt.val, btn);
+    container.appendChild(btn);
+  });
+
+  const btnQuiz = document.getElementById('btn-quiz');
+  btnQuiz.disabled = !(currentQ in quizAnswers);
+
+  // Show category progress dots (2 per category)
+  const catIndex = Math.floor(currentQ / 2);
+  const cats = ["Søvnvaner","Ryddelighed","Gæster & fester","Ryger & kæledyr","Mad & køkken","Hjemmeliv"];
+  document.getElementById('quiz-cat-step').textContent = `Kategori ${catIndex + 1} af ${cats.length}`;
+}
+
+function selectQuizOption(val, btn) {
+  quizAnswers[currentQ] = val;
+  document.querySelectorAll('.quiz-option').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  document.getElementById('btn-quiz').disabled = false;
+  setTimeout(() => nextQuiz(), 380);
+}
+
+function nextQuiz() {
+  if (!(currentQ in quizAnswers)) return;
+  currentQ++;
+  if (currentQ < QUIZ.length) {
+    renderQuizQuestion('fwd');
+  } else {
+    document.getElementById('quiz-bar').style.width = '100%';
+    setTimeout(() => {
+      if (role === 'udlejer') {
+        showScreen('step-udlejer');
+      } else {
+        showScreen('step-søgende');
+      }
+    }, 350);
+  }
+}
+
+function goBack() {
+  if (currentQ > 0) {
+    currentQ--;
+    renderQuizQuestion('back');
+  } else {
+    showScreen('step-role');
+    renderDots('dots-role', QUIZ.length + 2, 0);
+  }
+}
+
+function goBackFromInfo() {
+  currentQ = QUIZ.length - 1;
+  showScreen('step-quiz');
+  renderQuizQuestion('back');
+}
+
+// ── IMAGE UPLOAD ───────────────────────────────────────────────
+function handleUpload(input) {
+  const previews = document.getElementById('upload-previews');
+  const zone = document.getElementById('upload-zone');
+  previews.innerHTML = '';
+  const files = Array.from(input.files).slice(0, 8);
+  if (files.length > 0) {
+    zone.classList.add('has-files');
+    zone.querySelector('.upload-title').textContent = `${files.length} billede${files.length > 1 ? 'r' : ''} valgt`;
+    zone.querySelector('.upload-sub').textContent = 'Klik for at ændre valg';
+    files.forEach(file => {
+      const img = document.createElement('img');
+      img.className = 'upload-thumb';
+      img.src = URL.createObjectURL(file);
+      previews.appendChild(img);
+    });
+  }
+}
+
+// ── SUCCESS ────────────────────────────────────────────────────
+function goToSuccess() {
+  // Build summary
+  const grid = document.getElementById('summary-grid');
+  const items = role === 'udlejer' ? [
+    { label: 'Rolle', val: '🏠 Udlejer', cls: '' },
+    { label: 'Adresse', val: document.getElementById('addr-street').value || 'Ikke angivet', cls: '' },
+    { label: 'By', val: document.getElementById('addr-city').value || 'Ikke angivet', cls: '' },
+    { label: 'Husleje', val: document.getElementById('rent').value ? `${Number(document.getElementById('rent').value).toLocaleString('da-DK')} kr/md` : 'Ikke angivet', cls: 'primary' },
+    { label: 'Størrelse', val: (document.getElementById('size-room').value && document.getElementById('size-total').value) ? `${document.getElementById('size-room').value} m² værelse · ${document.getElementById('size-total').value} m² total` : 'Ikke angivet', cls: '' },
+    { label: 'Match score', val: '🎯 Klar til matching', cls: 'primary' },
+  ] : [
+    { label: 'Rolle', val: '🔍 Søgende', cls: '' },
+    { label: 'Søger i', val: document.getElementById('search-city').value || 'Ikke angivet', cls: '' },
+    { label: 'Min. budget', val: document.getElementById('budget-min').value ? `${Number(document.getElementById('budget-min').value).toLocaleString('da-DK')} kr/md` : 'Ikke angivet', cls: '' },
+    { label: 'Maks. budget', val: document.getElementById('budget-max').value ? `${Number(document.getElementById('budget-max').value).toLocaleString('da-DK')} kr/md` : 'Ikke angivet', cls: 'primary' },
+    { label: 'Klar til flytning', val: document.getElementById('move-date').value || 'Ikke angivet', cls: '' },
+    { label: 'Match score', val: '🎯 Klar til matching', cls: 'primary' },
+  ];
+
+  grid.innerHTML = items.map(i => `
+    <div class="summary-item">
+      <div class="summary-item-label">${i.label}</div>
+      <div class="summary-item-val ${i.cls}">${i.val}</div>
+    </div>`).join('');
+
+  // Lifestyle tags
+  const tagContainer = document.getElementById('lifestyle-tags');
+  tagContainer.innerHTML = Object.values(quizAnswers).map(val => {
+    const label = LABELS[val] || val;
+    return `<span style="display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:999px;background:var(--primary-soft);color:var(--primary);font-size:12px;font-weight:600;">
+      <span class="material-symbols-rounded" style="font-size:14px">check_circle</span>${label}</span>`;
+  }).join('');
+
+  showScreen('step-success');
+}
+
+// ── INIT ───────────────────────────────────────────────────────
+renderDots('dots-role', QUIZ.length + 2, 0);
+</script>
+</body>
+</html>

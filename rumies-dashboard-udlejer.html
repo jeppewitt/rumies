@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rumies — Udlejers Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20,400,1,0" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #F7F4EF;
+    --card: #FFFFFF;
+    --primary: #D97757;
+    --primary-hover: #C4633F;
+    --primary-soft: #F5E6DF;
+    --accent: #7B9E87;
+    --accent-soft: #E3EEE7;
+    --ink: #1A0F0A;
+    --ink2: #4A3528;
+    --ink3: #9C7B6E;
+    --border: #E8E0D8;
+    --gold: #C9A84C;
+    --gold-soft: #F5EDD0;
+    --shadow-sm: 0 1px 4px rgba(26,15,10,0.06);
+    --shadow-md: 0 4px 20px rgba(26,15,10,0.08);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Manrope',sans-serif; background:var(--bg); color:var(--ink); min-height:100vh; }
+
+  nav {
+    position:sticky; top:0; z-index:100;
+    background:rgba(247,244,239,0.95); backdrop-filter:blur(12px);
+    border-bottom:1px solid var(--border);
+    padding:0 32px; height:64px;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .nav-logo { display:flex; align-items:center; gap:9px; text-decoration:none; }
+  .nav-logo svg { width:28px; height:28px; }
+  .nav-logo-text { font-family:'Fraunces',serif; font-size:20px; font-weight:700; color:var(--ink); letter-spacing:-0.3px; }
+  .nav-links { display:flex; align-items:center; gap:4px; }
+  .nav-link {
+    display:flex; align-items:center; gap:6px; padding:8px 14px; border-radius:10px;
+    font-size:14px; font-weight:500; color:var(--ink2); cursor:pointer;
+    border:none; background:none; font-family:'Manrope',sans-serif; transition:all 0.2s; text-decoration:none;
+  }
+  .nav-link:hover { background:var(--border); color:var(--ink); }
+  .nav-link.active { background:var(--primary); color:white; }
+  .nav-link .material-symbols-rounded { font-size:18px; }
+  .nav-avatar {
+    width:36px; height:36px; border-radius:50%;
+    background:var(--accent-soft); border:2px solid var(--border);
+    display:flex; align-items:center; justify-content:center; cursor:pointer;
+  }
+
+  .page { max-width:1100px; margin:0 auto; padding:36px 32px 80px; }
+
+  /* PAGE HEADER */
+  .page-header { margin-bottom:32px; }
+  .page-label { font-size:12px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:var(--primary); margin-bottom:6px; }
+  .page-title { font-family:'Fraunces',serif; font-size:32px; font-weight:700; line-height:1.1; margin-bottom:6px; }
+  .page-title em { font-style:italic; color:var(--primary); }
+  .page-sub { font-size:14px; color:var(--ink3); }
+
+  /* STAT CARDS */
+  .stats-row { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:32px; }
+  .stat-card {
+    background:var(--card); border-radius:16px; border:1px solid var(--border);
+    padding:20px; box-shadow:var(--shadow-sm);
+    animation:fadeUp 0.4s ease both;
+  }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+  .stat-card-icon {
+    width:40px; height:40px; border-radius:12px;
+    display:flex; align-items:center; justify-content:center;
+    margin-bottom:14px;
+  }
+  .stat-card-icon .material-symbols-rounded { font-size:22px; }
+  .stat-card-icon.orange { background:var(--primary-soft); }
+  .stat-card-icon.orange .material-symbols-rounded { color:var(--primary); }
+  .stat-card-icon.green  { background:var(--accent-soft); }
+  .stat-card-icon.green  .material-symbols-rounded { color:var(--accent); }
+  .stat-card-icon.gold   { background:var(--gold-soft); }
+  .stat-card-icon.gold   .material-symbols-rounded { color:var(--gold); }
+  .stat-card-icon.ink    { background:#F0EAE4; }
+  .stat-card-icon.ink    .material-symbols-rounded { color:var(--ink2); }
+  .stat-val { font-family:'Fraunces',serif; font-size:28px; font-weight:700; color:var(--ink); line-height:1; margin-bottom:4px; }
+  .stat-label { font-size:13px; color:var(--ink3); }
+  .stat-delta { font-size:12px; font-weight:600; margin-top:6px; display:inline-flex; align-items:center; gap:3px; }
+  .stat-delta.up { color:var(--accent); }
+  .stat-delta.up .material-symbols-rounded { font-size:14px; }
+
+  /* APARTMENT OVERVIEW */
+  .apt-card {
+    background:var(--card); border-radius:20px; border:1px solid var(--border);
+    padding:24px; margin-bottom:28px; box-shadow:var(--shadow-sm);
+    display:flex; gap:24px; align-items:center;
+    animation:fadeUp 0.4s 0.1s ease both;
+  }
+  .apt-img {
+    width:120px; height:88px; border-radius:12px; flex-shrink:0;
+    background:linear-gradient(135deg,#E8C9BC,#F5DEC0);
+    display:flex; align-items:center; justify-content:center; font-size:40px;
+    border:1px solid var(--border);
+  }
+  .apt-info { flex:1; }
+  .apt-address { font-family:'Fraunces',serif; font-size:18px; font-weight:700; color:var(--ink); margin-bottom:4px; }
+  .apt-meta { font-size:13px; color:var(--ink3); margin-bottom:12px; display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+  .apt-meta .material-symbols-rounded { font-size:14px; }
+  .apt-tags { display:flex; gap:8px; flex-wrap:wrap; }
+  .apt-tag {
+    font-size:12px; font-weight:600; padding:5px 12px; border-radius:999px;
+    background:var(--bg); color:var(--ink2); border:1px solid var(--border);
+    display:inline-flex; align-items:center; gap:5px;
+  }
+  .apt-tag .material-symbols-rounded { font-size:13px; color:var(--primary); }
+  .apt-actions { display:flex; flex-direction:column; gap:8px; flex-shrink:0; }
+  .apt-btn {
+    padding:9px 18px; border-radius:10px; font-size:13px; font-weight:700;
+    cursor:pointer; transition:all 0.2s; font-family:'Manrope',sans-serif;
+    display:flex; align-items:center; gap:6px; white-space:nowrap;
+  }
+  .apt-btn.primary { background:var(--primary); color:white; border:none; }
+  .apt-btn.primary:hover { background:var(--primary-hover); }
+  .apt-btn.secondary { background:var(--card); color:var(--ink2); border:1.5px solid var(--border); }
+  .apt-btn.secondary:hover { border-color:var(--ink2); }
+  .apt-btn .material-symbols-rounded { font-size:16px; }
+
+  /* TABS */
+  .tabs { display:flex; border-bottom:1.5px solid var(--border); margin-bottom:24px; }
+  .tab {
+    display:flex; align-items:center; gap:6px; padding:12px 20px;
+    font-size:14px; font-weight:600; color:var(--ink3); cursor:pointer;
+    border-bottom:2.5px solid transparent; margin-bottom:-1.5px;
+    transition:all 0.2s; background:none;
+    border-top:none; border-left:none; border-right:none;
+    font-family:'Manrope',sans-serif;
+  }
+  .tab:hover { color:var(--ink); }
+  .tab.active { color:var(--primary); border-bottom-color:var(--primary); }
+  .tab .material-symbols-rounded { font-size:17px; }
+  .tab-badge {
+    background:var(--primary); color:white;
+    font-size:11px; font-weight:700; padding:2px 7px; border-radius:999px; line-height:1.4;
+  }
+
+  /* INTERESTED GRID */
+  .interested-grid { display:flex; flex-direction:column; gap:14px; }
+
+  .interested-card {
+    background:var(--card); border-radius:16px; border:1.5px solid var(--border);
+    padding:20px; display:flex; align-items:center; gap:18px;
+    transition:all 0.2s; cursor:default;
+    animation:fadeUp 0.4s ease both;
+  }
+  .interested-card:hover { box-shadow:var(--shadow-md); border-color:var(--primary-soft); transform:translateY(-1px); }
+  .interested-card.new-req { border-color:var(--primary); }
+
+  .interested-avatar {
+    width:56px; height:56px; border-radius:50%; flex-shrink:0;
+    background:var(--bg); display:flex; align-items:center; justify-content:center;
+    font-size:26px; border:2px solid var(--border); position:relative;
+  }
+  .verified-dot {
+    position:absolute; bottom:0; right:0;
+    width:18px; height:18px; border-radius:50%;
+    background:var(--accent); border:2px solid var(--card);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .verified-dot .material-symbols-rounded { font-size:11px; color:white; }
+
+  .interested-info { flex:1; min-width:0; }
+  .interested-name-row { display:flex; align-items:center; gap:8px; margin-bottom:3px; flex-wrap:wrap; }
+  .interested-name { font-family:'Fraunces',serif; font-size:16px; font-weight:700; color:var(--ink); }
+  .new-badge {
+    background:var(--primary); color:white;
+    font-size:10px; font-weight:700; padding:2px 8px; border-radius:999px;
+  }
+  .interested-meta { font-size:13px; color:var(--ink3); margin-bottom:10px; display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
+  .interested-meta .material-symbols-rounded { font-size:14px; }
+  .interested-meta .dot { width:3px; height:3px; border-radius:50%; background:var(--border); display:inline-block; }
+
+  .interested-traits { display:flex; gap:6px; flex-wrap:wrap; }
+  .trait {
+    font-size:11px; font-weight:600; padding:4px 10px; border-radius:999px;
+    background:var(--bg); color:var(--ink2); border:1px solid var(--border);
+    display:inline-flex; align-items:center; gap:4px;
+  }
+  .trait .material-symbols-rounded { font-size:12px; color:var(--primary); }
+
+  .interested-score {
+    flex-shrink:0; text-align:center;
+    display:flex; flex-direction:column; align-items:center; gap:4px;
+  }
+  .score-ring { width:48px; height:48px; position:relative; }
+  .score-ring svg { transform:rotate(-90deg); width:48px; height:48px; }
+  .ring-bg   { fill:none; stroke:var(--border); stroke-width:4; }
+  .ring-fill { fill:none; stroke-width:4; stroke-linecap:round; }
+  .ring-high   { stroke:var(--accent); }
+  .ring-medium { stroke:var(--primary); }
+  .ring-num {
+    position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+    font-size:11px; font-weight:800; color:var(--ink);
+  }
+  .score-label { font-size:11px; font-weight:600; color:var(--ink3); }
+
+  .interested-actions { display:flex; flex-direction:column; gap:7px; flex-shrink:0; }
+  .action-btn {
+    padding:8px 16px; border-radius:10px; font-size:13px; font-weight:700;
+    cursor:pointer; transition:all 0.2s; font-family:'Manrope',sans-serif;
+    display:flex; align-items:center; gap:5px; white-space:nowrap;
+  }
+  .action-btn.primary { background:var(--primary); color:white; border:none; }
+  .action-btn.primary:hover { background:var(--primary-hover); }
+  .action-btn.secondary { background:var(--card); color:var(--ink2); border:1.5px solid var(--border); }
+  .action-btn.secondary:hover { border-color:var(--ink2); }
+  .action-btn.danger { background:var(--card); color:#C0392B; border:1.5px solid #F5C6C0; }
+  .action-btn.danger:hover { background:#FDF0EF; }
+  .action-btn .material-symbols-rounded { font-size:15px; }
+
+  /* EMPTY STATE */
+  .empty-state { text-align:center; padding:64px 20px; }
+  .empty-icon { font-size:48px; margin-bottom:16px; }
+  .empty-title { font-family:'Fraunces',serif; font-size:20px; font-weight:600; color:var(--ink2); margin-bottom:8px; }
+  .empty-sub { font-size:14px; color:var(--ink3); }
+
+  /* TOAST */
+  .toast {
+    position:fixed; bottom:24px; left:50%;
+    transform:translateX(-50%) translateY(80px);
+    background:var(--ink); color:white;
+    padding:12px 20px; border-radius:12px;
+    font-size:14px; font-weight:500;
+    display:flex; align-items:center; gap:8px;
+    box-shadow:0 8px 24px rgba(0,0,0,0.2);
+    transition:transform 0.35s cubic-bezier(0.34,1.56,0.64,1);
+    z-index:1000; white-space:nowrap;
+  }
+  .toast.show { transform:translateX(-50%) translateY(0); }
+
+  @media (max-width:768px) {
+    nav { padding:0 16px; }
+    .page { padding:24px 16px 60px; }
+    .stats-row { grid-template-columns:1fr 1fr; }
+    .apt-card { flex-direction:column; }
+    .interested-card { flex-wrap:wrap; }
+    .nav-links { display:none; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="rumies-landing.html">
+    <svg viewBox="0 0 28 28" fill="none">
+      <polygon points="14,2 26,24 2,24" fill="#D97757"/>
+      <polygon points="14,7 23,22 5,22" fill="#F7F4EF" opacity="0.3"/>
+    </svg>
+    <span class="nav-logo-text">Rumies</span>
+  </a>
+  <div class="nav-links">
+    <a class="nav-link" href="rumies-matches.html"><span class="material-symbols-rounded">search</span>Søg</a>
+    <a class="nav-link" href="rumies-matches.html"><span class="material-symbols-rounded">favorite</span>Matches</a>
+    <a class="nav-link" href="rumies-chat.html"><span class="material-symbols-rounded">chat_bubble</span>Beskeder</a>
+    <a class="nav-link active" href="rumies-dashboard-udlejer.html"><span class="material-symbols-rounded">person</span>Profil</a>
+  </div>
+  <a class="nav-avatar" href="rumies-dashboard-udlejer.html">
+    <span class="material-symbols-rounded" style="font-size:20px;color:var(--ink3)">person</span>
+  </a>
+</nav>
+
+<div class="page">
+
+  <div class="page-header">
+    <div class="page-label">Udlejer</div>
+    <h1 class="page-title">Godmorgen, <em>Marcus</em> 👋</h1>
+    <p class="page-sub">Du har 3 nye interesserede siden sidst — her er et overblik.</p>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-row">
+    <div class="stat-card" style="animation-delay:0s">
+      <div class="stat-card-icon orange"><span class="material-symbols-rounded">visibility</span></div>
+      <div class="stat-val">47</div>
+      <div class="stat-label">Profilvisninger</div>
+      <div class="stat-delta up"><span class="material-symbols-rounded">trending_up</span>+12 denne uge</div>
+    </div>
+    <div class="stat-card" style="animation-delay:0.06s">
+      <div class="stat-card-icon green"><span class="material-symbols-rounded">people</span></div>
+      <div class="stat-val">8</div>
+      <div class="stat-label">Interesserede</div>
+      <div class="stat-delta up"><span class="material-symbols-rounded">trending_up</span>3 nye i dag</div>
+    </div>
+    <div class="stat-card" style="animation-delay:0.12s">
+      <div class="stat-card-icon gold"><span class="material-symbols-rounded">chat_bubble</span></div>
+      <div class="stat-val">4</div>
+      <div class="stat-label">Aktive samtaler</div>
+    </div>
+  </div>
+
+  <!-- APARTMENT -->
+  <div class="apt-card">
+    <div class="apt-img">🏠</div>
+    <div class="apt-info">
+      <div class="apt-address">Nørrebro, 2200 København N</div>
+      <div class="apt-meta">
+        <span class="material-symbols-rounded">square_foot</span>18 m² værelse · 72 m² total
+        <span class="dot" style="width:3px;height:3px;border-radius:50%;background:var(--border);display:inline-block"></span>
+        <span class="material-symbols-rounded">payments</span>6.500 kr/md
+        <span class="dot" style="width:3px;height:3px;border-radius:50%;background:var(--border);display:inline-block"></span>
+        <span class="material-symbols-rounded">calendar_today</span>Ledig fra 1. feb 2026
+      </div>
+      <div class="apt-tags">
+        <span class="apt-tag"><span class="material-symbols-rounded">verified</span>Verificeret</span>
+        <span class="apt-tag"><span class="material-symbols-rounded">visibility</span>Synlig</span>
+        <span class="apt-tag"><span class="material-symbols-rounded">smoke_free</span>Ikke-ryger</span>
+        <span class="apt-tag"><span class="material-symbols-rounded">pets</span>Kæledyr tilladt</span>
+      </div>
+    </div>
+    <div class="apt-actions">
+      <button class="apt-btn primary" onclick="toast('✏️','Redigér opslag kommer snart!')">
+        <span class="material-symbols-rounded">edit</span>Redigér opslag
+      </button>
+      <button class="apt-btn secondary" onclick="toast('👁️','Forhåndsvisning kommer snart!')">
+        <span class="material-symbols-rounded">visibility</span>Se opslag
+      </button>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('interesserede', this)">
+      <span class="material-symbols-rounded">people</span>Interesserede
+      <span class="tab-badge" id="badge-int">8</span>
+    </button>
+    <button class="tab" onclick="switchTab('nye', this)">
+      <span class="material-symbols-rounded">new_releases</span>Nye i dag
+      <span class="tab-badge" id="badge-nye">3</span>
+    </button>
+    <button class="tab" onclick="switchTab('arkiv', this)">
+      <span class="material-symbols-rounded">archive</span>Arkiv
+    </button>
+  </div>
+
+  <!-- INTERESTED GRID -->
+  <div class="interested-grid" id="interested-grid"></div>
+
+</div>
+
+<div class="toast" id="toastEl">
+  <span id="toastIcon">✅</span>
+  <span id="toastMsg"></span>
+</div>
+
+<script>
+const INTERESTED = [
+  { id:1, name:"Sofie",   age:22, emoji:"👩‍🎓", job:"Studerende, CBS",  location:"Nørrebro, København",
+    budget:"6.500 kr/md", score:92, verified:true,  isNew:true,
+    traits:["Morgenmenneske","Ikke-ryger","Ryddelig","Vegetar"],
+  },
+  { id:2, name:"Mikkel",  age:25, emoji:"👨‍💻", job:"Softwareudvikler", location:"Vesterbro, København",
+    budget:"7.500 kr/md", score:87, verified:true,  isNew:true,
+    traits:["Natteravn","Ikke-ryger","Ryddelig"],
+  },
+  { id:3, name:"Emma",    age:23, emoji:"🎨", job:"Studerende, AU",   location:"Trøjborg, Aarhus",
+    budget:"4.800 kr/md", score:84, verified:false, isNew:true,
+    traits:["Morgenmenneske","Dyrevenlig","Vegetar"],
+  },
+  { id:4, name:"Jonas",   age:28, emoji:"🏋️", job:"Fysioterapeut",    location:"Amager, København",
+    budget:"6.800 kr/md", score:81, verified:true,  isNew:false,
+    traits:["Tidlig opvågning","Ryddelig","Ikke-ryger"],
+  },
+  { id:5, name:"Camille", age:21, emoji:"🌿", job:"Studerende, AU",   location:"Frederiksbjerg, Aarhus",
+    budget:"4.500 kr/md", score:78, verified:false, isNew:false,
+    traits:["Dyrevenlig","Vegetar","Morgenmenneske"],
+  },
+  { id:6, name:"Oliver",  age:26, emoji:"🎸", job:"Musikpædagog",     location:"Frederiksberg, København",
+    budget:"6.200 kr/md", score:75, verified:true,  isNew:false,
+    traits:["Natteravn","Kreativ","Ikke-ryger"],
+  },
+  { id:7, name:"Laura",   age:24, emoji:"📚", job:"Studerende, AU",   location:"Aarhus C",
+    budget:"5.200 kr/md", score:71, verified:true,  isNew:false,
+    traits:["Ryddelig","Stille hjemmeliv","Ikke-ryger"],
+  },
+  { id:8, name:"Noah",    age:27, emoji:"🧑‍🍳", job:"Kok",              location:"Østerbro, København",
+    budget:"7.000 kr/md", score:68, verified:false, isNew:false,
+    traits:["Madentusiast","Dyrevenlig","Natteravn"],
+  },
+];
+
+let activeTab = 'interesserede';
+let dismissed = new Set();
+
+function getList() {
+  let list = INTERESTED.filter(p => !dismissed.has(p.id));
+  if (activeTab === 'nye') list = list.filter(p => p.isNew);
+  return list;
+}
+
+function scoreClass(s) { return s >= 80 ? 'ring-high' : 'ring-medium'; }
+
+function buildCard(p, delay) {
+  const circ = 2 * Math.PI * 20;
+  const offset = circ - (p.score / 100) * circ;
+  const traits = p.traits.map(t =>
+    `<span class="trait"><span class="material-symbols-rounded">check_circle</span>${t}</span>`
+  ).join('');
+
+  return `
+  <div class="interested-card ${p.isNew ? 'new-req' : ''}" id="icard-${p.id}" style="animation-delay:${delay}s">
+    <div class="interested-avatar">
+      ${p.emoji}
+      ${p.verified ? `<div class="verified-dot"><span class="material-symbols-rounded">check</span></div>` : ''}
+    </div>
+    <div class="interested-info">
+      <div class="interested-name-row">
+        <span class="interested-name">${p.name}, ${p.age}</span>
+        ${p.isNew ? `<span class="new-badge">Ny</span>` : ''}
+      </div>
+      <div class="interested-meta">
+        <span class="material-symbols-rounded">location_on</span>${p.location}
+        <span class="dot"></span>${p.job}
+        <span class="dot"></span><span class="material-symbols-rounded">payments</span>${p.budget}
+      </div>
+      <div class="interested-traits">${traits}</div>
+    </div>
+    <div class="interested-score">
+      <div class="score-ring">
+        <svg viewBox="0 0 48 48">
+          <circle class="ring-bg"   cx="24" cy="24" r="20"/>
+          <circle class="ring-fill ${scoreClass(p.score)}" cx="24" cy="24" r="20"
+            stroke-dasharray="${circ.toFixed(1)}" stroke-dashoffset="${offset.toFixed(1)}"/>
+        </svg>
+        <div class="ring-num">${p.score}%</div>
+      </div>
+      <div class="score-label">Match</div>
+    </div>
+    <div class="interested-actions">
+      <button class="action-btn primary" onclick="window.location='rumies-chat.html'">
+        <span class="material-symbols-rounded">chat_bubble</span>Skriv
+      </button>
+      <button class="action-btn secondary" onclick="window.location='rumies-profile.html'">
+        <span class="material-symbols-rounded">open_in_new</span>Profil
+      </button>
+      <button class="action-btn danger" onclick="dismiss(${p.id})">
+        <span class="material-symbols-rounded">close</span>Afvis
+      </button>
+    </div>
+  </div>`;
+}
+
+function render() {
+  const grid = document.getElementById('interested-grid');
+  const list = getList();
+
+  if (!list.length) {
+    const msg = activeTab === 'nye'
+      ? { icon:'🎉', title:'Ingen nye i dag', sub:'Nye interesserede vises her så snart nogen udtrykker interesse.' }
+      : { icon:'🏠', title:'Ingen interesserede endnu', sub:'Del dit opslag for at tiltrække potentielle roomies.' };
+    grid.innerHTML = `<div class="empty-state"><div class="empty-icon">${msg.icon}</div><div class="empty-title">${msg.title}</div><div class="empty-sub">${msg.sub}</div></div>`;
+    return;
+  }
+
+  grid.innerHTML = list.map((p, i) => buildCard(p, i * 0.06)).join('');
+  document.getElementById('badge-int').textContent = INTERESTED.filter(p => !dismissed.has(p.id)).length;
+  document.getElementById('badge-nye').textContent = INTERESTED.filter(p => p.isNew && !dismissed.has(p.id)).length;
+}
+
+function dismiss(id) {
+  const card = document.getElementById(`icard-${id}`);
+  card.style.opacity = '0';
+  card.style.transform = 'translateX(20px)';
+  card.style.transition = 'all 0.25s ease';
+  setTimeout(() => {
+    dismissed.add(id);
+    render();
+  }, 250);
+  toast('🗑️', 'Ansøgning arkiveret');
+}
+
+function switchTab(tab, el) {
+  activeTab = tab;
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  render();
+}
+
+let toastTimer;
+function toast(icon, msg) {
+  const el = document.getElementById('toastEl');
+  document.getElementById('toastIcon').textContent = icon;
+  document.getElementById('toastMsg').textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 2800);
+}
+
+render();
+</script>
+</body>
+</html>

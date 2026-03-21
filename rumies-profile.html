@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rumies — Sofie, 24</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;1,9..144,400&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20,400,1,0" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #F7F4EF;
+    --card: #FFFFFF;
+    --primary: #D97757;
+    --primary-hover: #C4633F;
+    --primary-soft: #F5E6DF;
+    --accent: #7B9E87;
+    --accent-soft: #E3EEE7;
+    --ink: #1A0F0A;
+    --ink2: #4A3528;
+    --ink3: #9C7B6E;
+    --border: #E8E0D8;
+    --gold: #C9A84C;
+    --gold-soft: #F5EDD0;
+    --shadow-sm: 0 1px 4px rgba(26,15,10,0.06);
+    --shadow-md: 0 4px 20px rgba(26,15,10,0.08);
+    --shadow-lg: 0 12px 48px rgba(26,15,10,0.11);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Manrope', sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    min-height: 100vh;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(247,244,239,0.9);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 32px; height: 64px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+
+  .nav-logo { display: flex; align-items: center; gap: 9px; text-decoration: none; }
+  .nav-logo svg { width: 28px; height: 28px; }
+  .nav-logo-text { font-family: 'Fraunces', serif; font-size: 20px; font-weight: 700; color: var(--ink); letter-spacing: -0.3px; }
+
+  .nav-links { display: flex; align-items: center; gap: 4px; }
+  .nav-link {
+    display: flex; align-items: center; gap: 6px;
+    padding: 8px 14px; border-radius: 10px;
+    font-size: 14px; font-weight: 500; color: var(--ink2);
+    cursor: pointer; border: none; background: none;
+    font-family: 'Manrope', sans-serif; transition: all 0.2s; text-decoration: none;
+  }
+  .nav-link:hover { background: var(--border); color: var(--ink); }
+  .nav-link.active { background: var(--primary); color: white; }
+  .nav-link .material-symbols-rounded { font-size: 18px; }
+
+  .nav-avatar {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: var(--accent-soft); border: 2px solid var(--border);
+    display: flex; align-items: center; justify-content: center; cursor: pointer;
+  }
+
+  /* ── LAYOUT ── */
+  .page {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 40px 32px 80px;
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 28px;
+    align-items: start;
+  }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    position: sticky;
+    top: 84px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  /* ── PROFILE CARD ── */
+  .profile-card {
+    background: var(--card);
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+    animation: fadeUp 0.5s ease both;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .profile-hero {
+    height: 140px;
+    background: linear-gradient(135deg, #E8C9BC 0%, #C8DDD0 100%);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .profile-hero-pattern {
+    position: absolute; inset: 0;
+    background-image: radial-gradient(circle at 20% 50%, rgba(217,119,87,0.15) 0%, transparent 60%),
+                      radial-gradient(circle at 80% 20%, rgba(123,158,135,0.15) 0%, transparent 50%);
+  }
+
+  .profile-avatar-wrap {
+    position: absolute;
+    bottom: -36px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .profile-avatar {
+    width: 80px; height: 80px;
+    border-radius: 50%;
+    border: 4px solid var(--card);
+    background: var(--bg);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 36px;
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+  }
+
+  .profile-body {
+    padding: 48px 20px 24px;
+    text-align: center;
+  }
+
+  .profile-name {
+    font-family: 'Fraunces', serif;
+    font-size: 22px; font-weight: 700;
+    color: var(--ink); margin-bottom: 4px;
+  }
+
+  .profile-location {
+    font-size: 13px; color: var(--ink3);
+    display: flex; align-items: center; justify-content: center; gap: 4px;
+    margin-bottom: 14px;
+  }
+  .profile-location .material-symbols-rounded { font-size: 15px; }
+
+  /* Role badge */
+  .role-badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 5px 12px; border-radius: 999px;
+    font-size: 12px; font-weight: 700;
+    margin-bottom: 16px;
+  }
+  .role-badge.udlejer { background: var(--primary-soft); color: var(--primary); }
+  .role-badge.søgende { background: var(--accent-soft); color: var(--accent); }
+  .role-badge .material-symbols-rounded { font-size: 14px; }
+
+  /* Verified badge */
+  .verified-badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 5px 12px; border-radius: 999px;
+    background: var(--accent-soft); color: var(--accent);
+    font-size: 12px; font-weight: 700;
+    margin-bottom: 20px;
+  }
+  .verified-badge .material-symbols-rounded { font-size: 14px; }
+
+  /* Match score ring */
+  .match-score-wrap {
+    background: var(--bg);
+    border-radius: 14px;
+    padding: 16px;
+    margin-bottom: 16px;
+    border: 1px solid var(--border);
+    display: flex; align-items: center; gap: 14px;
+  }
+
+  .match-ring { width: 52px; height: 52px; position: relative; flex-shrink: 0; }
+  .match-ring svg { transform: rotate(-90deg); width: 52px; height: 52px; }
+  .ring-bg   { fill: none; stroke: var(--border); stroke-width: 4; }
+  .ring-fill { fill: none; stroke-width: 4; stroke-linecap: round; stroke: var(--accent); transition: stroke-dashoffset 1.2s cubic-bezier(0.22,1,0.36,1); }
+  .ring-num {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 13px; font-weight: 800; color: var(--ink);
+  }
+
+  .match-label-wrap {}
+  .match-label { font-size: 16px; font-weight: 800; color: var(--ink); }
+  .match-label-sub { font-size: 12px; color: var(--ink3); margin-top: 2px; }
+  .match-stars { display: flex; gap: 2px; margin-top: 5px; }
+  .match-stars .material-symbols-rounded { font-size: 14px; color: var(--gold); }
+
+  /* CTA buttons */
+  .btn-primary {
+    width: 100%; padding: 13px 16px;
+    background: var(--primary); color: white;
+    border: none; border-radius: 12px;
+    font-size: 14px; font-weight: 700;
+    font-family: 'Manrope', sans-serif;
+    cursor: pointer; transition: all 0.2s;
+    display: flex; align-items: center; justify-content: center; gap: 7px;
+    margin-bottom: 10px;
+  }
+  .btn-primary:hover { background: var(--primary-hover); transform: translateY(-1px); box-shadow: 0 4px 16px rgba(217,119,87,0.3); }
+  .btn-primary .material-symbols-rounded { font-size: 17px; }
+
+  .btn-secondary {
+    width: 100%; padding: 12px 16px;
+    background: var(--card); color: var(--ink2);
+    border: 1.5px solid var(--border); border-radius: 12px;
+    font-size: 14px; font-weight: 600;
+    font-family: 'Manrope', sans-serif;
+    cursor: pointer; transition: all 0.2s;
+    display: flex; align-items: center; justify-content: center; gap: 7px;
+  }
+  .btn-secondary:hover { border-color: var(--ink2); color: var(--ink); }
+  .btn-secondary .material-symbols-rounded { font-size: 17px; }
+
+  /* Quick stats */
+  .quick-stats {
+    background: var(--card);
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    animation: fadeUp 0.5s 0.1s ease both;
+  }
+
+  .stat-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 13px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .stat-row:last-child { border-bottom: none; }
+
+  .stat-left { display: flex; align-items: center; gap: 10px; }
+  .stat-icon {
+    width: 32px; height: 32px; border-radius: 8px;
+    background: var(--bg); display: flex; align-items: center; justify-content: center;
+  }
+  .stat-icon .material-symbols-rounded { font-size: 17px; color: var(--primary); }
+  .stat-label { font-size: 13px; color: var(--ink3); }
+  .stat-val { font-size: 13px; font-weight: 700; color: var(--ink); }
+
+  /* ── MAIN CONTENT ── */
+  .main { display: flex; flex-direction: column; gap: 20px; }
+
+  .section {
+    background: var(--card);
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    padding: 28px;
+    box-shadow: var(--shadow-sm);
+    animation: fadeUp 0.5s ease both;
+  }
+
+  .section-title {
+    font-family: 'Fraunces', serif;
+    font-size: 20px; font-weight: 700;
+    color: var(--ink); margin-bottom: 16px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .section-title .material-symbols-rounded { font-size: 20px; color: var(--primary); }
+
+  /* Bio */
+  .bio-text {
+    font-size: 15px; color: var(--ink2);
+    line-height: 1.75; white-space: pre-line;
+  }
+
+  /* Lifestyle tags */
+  .tags-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tag {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 7px 14px; border-radius: 999px;
+    font-size: 13px; font-weight: 600;
+    background: var(--bg); color: var(--ink2);
+    border: 1.5px solid var(--border);
+    transition: all 0.2s;
+  }
+  .tag:hover { border-color: var(--primary); color: var(--primary); }
+  .tag .material-symbols-rounded { font-size: 15px; color: var(--primary); }
+
+  /* Photo gallery */
+  .gallery {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .gallery-main {
+    grid-column: 1 / -1;
+    height: 220px;
+    border-radius: 14px;
+    overflow: hidden;
+    background: var(--bg);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 48px;
+    border: 1px solid var(--border);
+    cursor: pointer; transition: all 0.2s;
+    position: relative;
+  }
+  .gallery-main:hover { box-shadow: var(--shadow-md); }
+  .gallery-thumb {
+    height: 120px;
+    border-radius: 12px;
+    overflow: hidden;
+    background: var(--bg);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 32px;
+    border: 1px solid var(--border);
+    cursor: pointer; transition: all 0.2s;
+    position: relative;
+  }
+  .gallery-thumb:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+  .gallery-thumb.more-overlay::after {
+    content: attr(data-more);
+    position: absolute; inset: 0;
+    background: rgba(26,15,10,0.5);
+    color: white; font-size: 20px; font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 12px;
+  }
+
+  /* Compatibility breakdown */
+  .compat-grid { display: flex; flex-direction: column; gap: 12px; }
+  .compat-row { display: flex; align-items: center; gap: 14px; }
+  .compat-label { font-size: 13px; font-weight: 600; color: var(--ink2); width: 130px; flex-shrink: 0; }
+  .compat-bar-wrap { flex: 1; height: 8px; background: var(--border); border-radius: 999px; overflow: hidden; }
+  .compat-bar { height: 100%; border-radius: 999px; background: var(--accent); transition: width 1.2s cubic-bezier(0.22,1,0.36,1); }
+  .compat-bar.medium { background: var(--primary); }
+  .compat-bar.low    { background: var(--gold); }
+  .compat-pct { font-size: 12px; font-weight: 700; color: var(--ink3); width: 36px; text-align: right; }
+
+  /* Role toggle (demo) */
+  .role-toggle {
+    display: flex; align-items: center; gap: 8px;
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 999px; padding: 4px;
+    margin-bottom: 24px;
+  }
+  .toggle-btn {
+    flex: 1; padding: 8px 16px; border-radius: 999px;
+    font-size: 13px; font-weight: 600;
+    border: none; cursor: pointer;
+    font-family: 'Manrope', sans-serif;
+    transition: all 0.2s; color: var(--ink3); background: none;
+  }
+  .toggle-btn.active { background: var(--primary); color: white; }
+
+  /* Demo notice */
+  .demo-bar {
+    background: var(--gold-soft);
+    border: 1px solid rgba(201,168,76,0.3);
+    border-radius: 12px; padding: 12px 16px;
+    display: flex; align-items: center; gap: 10px;
+    font-size: 13px; color: var(--ink2);
+    margin-bottom: 28px;
+  }
+  .demo-bar .material-symbols-rounded { font-size: 18px; color: var(--gold); flex-shrink: 0; }
+
+  /* Back link */
+  .back-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 14px; font-weight: 600; color: var(--ink3);
+    text-decoration: none; margin-bottom: 24px;
+    transition: color 0.2s; background: none; border: none;
+    cursor: pointer; font-family: 'Manrope', sans-serif; padding: 0;
+  }
+  .back-link:hover { color: var(--ink); }
+  .back-link .material-symbols-rounded { font-size: 18px; }
+
+  @media (max-width: 768px) {
+    .page { grid-template-columns: 1fr; padding: 24px 16px 60px; }
+    .sidebar { position: static; }
+    nav { padding: 0 16px; }
+    .nav-links { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="rumies-landing.html">
+    <svg viewBox="0 0 28 28" fill="none">
+      <polygon points="14,2 26,24 2,24" fill="#D97757"/>
+      <polygon points="14,7 23,22 5,22" fill="#F7F4EF" opacity="0.3"/>
+    </svg>
+    <span class="nav-logo-text">Rumies</span>
+  </a>
+  <div class="nav-links">
+    <a class="nav-link" href="rumies-matches.html"><span class="material-symbols-rounded">search</span>Søg</a>
+    <a class="nav-link" href="rumies-matches.html"><span class="material-symbols-rounded">favorite</span>Matches</a>
+    <a class="nav-link" href="rumies-chat.html"><span class="material-symbols-rounded">chat_bubble</span>Beskeder</a>
+    <a class="nav-link" href="rumies-dashboard-søgende.html"><span class="material-symbols-rounded">person</span>Profil</a>
+  </div>
+  <a class="nav-avatar" href="rumies-dashboard-søgende.html">
+    <span class="material-symbols-rounded" style="font-size:20px;color:var(--ink3)">person</span>
+  </a>
+</nav>
+
+<div class="page">
+
+  <!-- ── SIDEBAR ── -->
+  <aside class="sidebar">
+
+    <div class="profile-card">
+      <div class="profile-hero">
+        <div class="profile-hero-pattern"></div>
+        <div class="profile-avatar-wrap">
+          <div class="profile-avatar" id="profile-avatar">👩‍🎓</div>
+        </div>
+      </div>
+
+      <div class="profile-body">
+        <h1 class="profile-name" id="profile-name">Sofie, 24</h1>
+        <div class="profile-location">
+          <span class="material-symbols-rounded">location_on</span>
+          <span id="profile-location">Nørrebro, København</span>
+        </div>
+
+        <div style="display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;margin-bottom:16px">
+          <span class="role-badge søgende" id="role-badge">
+            <span class="material-symbols-rounded">search</span>
+            <span id="role-badge-txt">Søger bolig</span>
+          </span>
+          <span class="verified-badge" id="verified-badge">
+            <span class="material-symbols-rounded">verified</span>Verificeret
+          </span>
+        </div>
+
+        <!-- Match score -->
+        <div class="match-score-wrap" id="match-score-wrap">
+          <div class="match-ring">
+            <svg viewBox="0 0 52 52">
+              <circle class="ring-bg" cx="26" cy="26" r="22"/>
+              <circle class="ring-fill" id="ring-fill" cx="26" cy="26" r="22"
+                stroke-dasharray="138.2"
+                stroke-dashoffset="138.2"/>
+            </svg>
+            <div class="ring-num" id="ring-num">0%</div>
+          </div>
+          <div class="match-label-wrap">
+            <div class="match-label" id="match-label">92% Match</div>
+            <div class="match-label-sub">Meget stærkt match</div>
+            <div class="match-stars">
+              <span class="material-symbols-rounded">star</span>
+              <span class="material-symbols-rounded">star</span>
+              <span class="material-symbols-rounded">star</span>
+              <span class="material-symbols-rounded">star</span>
+              <span class="material-symbols-rounded">star_half</span>
+            </div>
+          </div>
+        </div>
+
+        <button class="btn-primary" onclick="window.location='rumies-chat.html'">
+          <span class="material-symbols-rounded">chat_bubble</span>
+          Skriv til Sofie
+        </button>
+        <button class="btn-secondary" onclick="window.location='rumies-matches.html'">
+          <span class="material-symbols-rounded">arrow_back</span>
+          Tilbage til matches
+        </button>
+      </div>
+    </div>
+
+    <!-- Quick stats -->
+    <div class="quick-stats">
+      <div class="stat-row" id="stat-budget">
+        <div class="stat-left">
+          <div class="stat-icon"><span class="material-symbols-rounded">payments</span></div>
+          <div class="stat-label" id="budget-label">Budget maks.</div>
+        </div>
+        <div class="stat-val" id="budget-val">6.500 kr/md</div>
+      </div>
+      <div class="stat-row">
+        <div class="stat-left">
+          <div class="stat-icon"><span class="material-symbols-rounded">smoke_free</span></div>
+          <div class="stat-label">Rygning</div>
+        </div>
+        <div class="stat-val">Ikke-ryger</div>
+      </div>
+      <div class="stat-row">
+        <div class="stat-left">
+          <div class="stat-icon"><span class="material-symbols-rounded">pets</span></div>
+          <div class="stat-label">Kæledyr</div>
+        </div>
+        <div class="stat-val">Tilladt</div>
+      </div>
+      <div class="stat-row" id="stat-available">
+        <div class="stat-left">
+          <div class="stat-icon"><span class="material-symbols-rounded">square_foot</span></div>
+          <div class="stat-label">Størrelse</div>
+        </div>
+        <div class="stat-val">18 m² / 72 m²</div>
+      </div>
+      <div class="stat-row" id="stat-available">
+        <div class="stat-left">
+          <div class="stat-icon"><span class="material-symbols-rounded">calendar_today</span></div>
+          <div class="stat-label">Ledig fra</div>
+        </div>
+        <div class="stat-val">1. feb 2026</div>
+      </div>
+    </div>
+
+  </aside>
+
+  <!-- ── MAIN ── -->
+  <div class="main">
+
+    <!-- Demo toggle -->
+    <div>
+      <div class="demo-bar">
+        <span class="material-symbols-rounded">info</span>
+        Demo: Skift mellem udlejer- og søgendeprofil for at se forskellen
+      </div>
+      <div class="role-toggle">
+        <button class="toggle-btn" onclick="setRole('søgende', this)">👤 Søgende</button>
+        <button class="toggle-btn active" onclick="setRole('udlejer', this)">🏠 Udlejer</button>
+      </div>
+    </div>
+
+    <!-- Om mig -->
+    <div class="section" style="animation-delay:0.05s">
+      <div class="section-title">
+        <span class="material-symbols-rounded">person</span>
+        Om mig
+      </div>
+      <p class="bio-text" id="bio-text">Hej! Jeg hedder Sofie og læser cand.merc på CBS. Jeg har et lyst 2-værelses på Nørrebro med et ledigt værelse fra februar.
+
+Jeg sætter pris på et rent og hyggeligt hjem, hvor der er plads til begge dele — stille aftener med en bog og kaffe, men også en god snak over aftensmaden. Jeg er tidlig oppe og elsker at lave morgenmad i fred.
+
+Perfekt match er nogen der er ryddelig, respekterer hinandens rytmer og gerne vil bidrage til et godt fællesskab uden at det behøver at være påtvunget.</p>
+    </div>
+
+    <!-- Livsstil -->
+    <div class="section" style="animation-delay:0.1s">
+      <div class="section-title">
+        <span class="material-symbols-rounded">favorite</span>
+        Livsstil &amp; vaner
+      </div>
+      <div class="tags-grid" id="tags-grid">
+        <span class="tag"><span class="material-symbols-rounded">wb_sunny</span>Morgenmenneske</span>
+        <span class="tag"><span class="material-symbols-rounded">cleaning_services</span>Meget ryddelig</span>
+        <span class="tag"><span class="material-symbols-rounded">smoke_free</span>Ikke-ryger</span>
+        <span class="tag"><span class="material-symbols-rounded">restaurant</span>Madentusiast</span>
+        <span class="tag"><span class="material-symbols-rounded">pets</span>Dyrevenlig</span>
+        <span class="tag"><span class="material-symbols-rounded">laptop_mac</span>Hjemme-type</span>
+        <span class="tag"><span class="material-symbols-rounded">eco</span>Vegetar</span>
+        <span class="tag"><span class="material-symbols-rounded">handshake</span>Respektfuld roomie</span>
+      </div>
+    </div>
+
+    <!-- Compatibility breakdown (only shown when viewing someone else) -->
+    <div class="section" id="compat-section" style="animation-delay:0.15s">
+      <div class="section-title">
+        <span class="material-symbols-rounded">analytics</span>
+        Jeres kompatibilitet
+      </div>
+      <div class="compat-grid">
+        <div class="compat-row">
+          <div class="compat-label">Søvnvaner</div>
+          <div class="compat-bar-wrap"><div class="compat-bar" style="width:0%" data-w="95%"></div></div>
+          <div class="compat-pct">95%</div>
+        </div>
+        <div class="compat-row">
+          <div class="compat-label">Ryddelighed</div>
+          <div class="compat-bar-wrap"><div class="compat-bar" style="width:0%" data-w="100%"></div></div>
+          <div class="compat-pct">100%</div>
+        </div>
+        <div class="compat-row">
+          <div class="compat-label">Sociale vaner</div>
+          <div class="compat-bar-wrap"><div class="compat-bar medium" style="width:0%" data-w="75%"></div></div>
+          <div class="compat-pct">75%</div>
+        </div>
+        <div class="compat-row">
+          <div class="compat-label">Ryger/kæledyr</div>
+          <div class="compat-bar-wrap"><div class="compat-bar" style="width:0%" data-w="100%"></div></div>
+          <div class="compat-pct">100%</div>
+        </div>
+        <div class="compat-row">
+          <div class="compat-label">Mad & køkken</div>
+          <div class="compat-bar-wrap"><div class="compat-bar medium" style="width:0%" data-w="80%"></div></div>
+          <div class="compat-pct">80%</div>
+        </div>
+        <div class="compat-row">
+          <div class="compat-label">Hjemmeliv</div>
+          <div class="compat-bar-wrap"><div class="compat-bar" style="width:0%" data-w="90%"></div></div>
+          <div class="compat-pct">90%</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Room photos (udlejer only) -->
+    <div class="section" id="photos-section" style="animation-delay:0.2s">
+      <div class="section-title">
+        <span class="material-symbols-rounded">photo_library</span>
+        Billeder af lejligheden
+      </div>
+      <div class="gallery">
+        <div class="gallery-main" style="background:linear-gradient(135deg,#E8C9BC,#F5DEC0)">
+          🛋️
+          <div style="position:absolute;bottom:12px;left:12px;background:rgba(26,15,10,0.6);color:white;font-size:12px;font-weight:600;padding:4px 10px;border-radius:8px">Stuen</div>
+        </div>
+        <div class="gallery-thumb" style="background:linear-gradient(135deg,#C8DDD0,#E3EEE7)">🛏️
+          <div style="position:absolute;bottom:8px;left:8px;background:rgba(26,15,10,0.6);color:white;font-size:11px;font-weight:600;padding:3px 8px;border-radius:6px">Værelse</div>
+        </div>
+        <div class="gallery-thumb more-overlay" data-more="+3 billeder" style="background:linear-gradient(135deg,#BED4E8,#D5C8E8)">🍳</div>
+      </div>
+
+      <!-- Room details -->
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:16px">
+        <div style="background:var(--bg);border-radius:12px;padding:12px 14px;border:1px solid var(--border);text-align:center">
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--ink3);margin-bottom:4px">Husleje</div>
+          <div style="font-size:16px;font-weight:800;color:var(--primary)">6.500 kr</div>
+          <div style="font-size:11px;color:var(--ink3)">pr. måned</div>
+        </div>
+        <div style="background:var(--bg);border-radius:12px;padding:12px 14px;border:1px solid var(--border);text-align:center">
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--ink3);margin-bottom:4px">Størrelse</div>
+          <div style="font-size:16px;font-weight:800;color:var(--ink)">18 m²</div>
+          <div style="font-size:11px;color:var(--ink3)">værelse · 72 m² total</div>
+        </div>
+        <div style="background:var(--bg);border-radius:12px;padding:12px 14px;border:1px solid var(--border);text-align:center">
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--ink3);margin-bottom:4px">Ledig fra</div>
+          <div style="font-size:16px;font-weight:800;color:var(--ink)">1. feb</div>
+          <div style="font-size:11px;color:var(--ink3)">2026</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="toast" style="
+  position:fixed;bottom:24px;left:50%;
+  transform:translateX(-50%) translateY(80px);
+  background:var(--ink);color:white;
+  padding:12px 20px;border-radius:12px;
+  font-size:14px;font-weight:500;
+  display:flex;align-items:center;gap:8px;
+  box-shadow:0 8px 24px rgba(0,0,0,0.2);
+  transition:transform 0.35s cubic-bezier(0.34,1.56,0.64,1);
+  z-index:1000;white-space:nowrap;
+">
+  <span id="toast-icon">💬</span>
+  <span id="toast-msg"></span>
+</div>
+
+<script>
+// ── ROLE TOGGLE ────────────────────────────────────────────────
+function setRole(role, btn) {
+  document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+
+  const isUdlejer = role === 'udlejer';
+
+  // Role badge
+  const badge = document.getElementById('role-badge');
+  const badgeTxt = document.getElementById('role-badge-txt');
+  badge.className = `role-badge ${role}`;
+  if (isUdlejer) {
+    badge.innerHTML = `<span class="material-symbols-rounded">home</span><span id="role-badge-txt">Udlejer</span>`;
+  } else {
+    badge.innerHTML = `<span class="material-symbols-rounded">search</span><span id="role-badge-txt">Søger bolig</span>`;
+  }
+
+  // Photos section
+  document.getElementById('photos-section').style.display = isUdlejer ? 'block' : 'none';
+
+  // Budget label
+  document.getElementById('budget-label').textContent = isUdlejer ? 'Husleje' : 'Budget maks.';
+  document.getElementById('budget-val').textContent    = isUdlejer ? '6.500 kr/md' : '7.000 kr/md';
+
+  // Bio
+  document.getElementById('bio-text').textContent = isUdlejer
+    ? `Hej! Jeg hedder Sofie og læser cand.merc på CBS. Jeg har et lyst 2-værelses på Nørrebro med et ledigt værelse fra februar.\n\nJeg sætter pris på et rent og hyggeligt hjem, hvor der er plads til begge dele — stille aftener med en bog og kaffe, men også en god snak over aftensmaden. Jeg er tidlig oppe og elsker at lave morgenmad i fred.\n\nPerfekt match er nogen der er ryddelig, respekterer hinandens rytmer og gerne vil bidrage til et godt fællesskab uden at det behøver at være påtvunget.`
+    : `Hej! Jeg er Sofie, 24 år og studerende på CBS. Jeg leder efter et værelse i København fra februar — helst Nørrebro, Vesterbro eller Frederiksberg.\n\nJeg er morgenmenneske, ikke-ryger og meget ryddelig. Jeg elsker at lave mad, men er god til at respektere fællesarealer. Vil gerne bo med nogen man kan hygge sig med, men som også forstår at man nogle gange bare vil have fred.\n\nJeg har haft tre positive anmeldelser fra tidligere bofæller — spørg endelig!`;
+
+  // CTA button
+  const cta = document.querySelector('.btn-primary');
+  cta.innerHTML = isUdlejer
+    ? `<span class="material-symbols-rounded">chat_bubble</span>Skriv til Sofie`
+    : `<span class="material-symbols-rounded">chat_bubble</span>Skriv til Sofie`;
+}
+
+// ── ANIMATE MATCH RING ON LOAD ─────────────────────────────────
+function animateRing(pct) {
+  const circumference = 2 * Math.PI * 22; // r=22 → ~138.2
+  const fill = document.getElementById('ring-fill');
+  const num  = document.getElementById('ring-num');
+  const offset = circumference - (pct / 100) * circumference;
+
+  // Animate number count-up
+  let current = 0;
+  const step = pct / 60;
+  const interval = setInterval(() => {
+    current = Math.min(current + step, pct);
+    num.textContent = Math.round(current) + '%';
+    if (current >= pct) clearInterval(interval);
+  }, 16);
+
+  // Animate ring
+  setTimeout(() => {
+    fill.style.strokeDashoffset = offset;
+  }, 100);
+}
+
+// ── ANIMATE COMPAT BARS ────────────────────────────────────────
+function animateBars() {
+  const bars = document.querySelectorAll('.compat-bar');
+  setTimeout(() => {
+    bars.forEach((bar, i) => {
+      setTimeout(() => {
+        bar.style.width = bar.dataset.w;
+      }, i * 80);
+    });
+  }, 300);
+}
+
+// ── TOAST ──────────────────────────────────────────────────────
+let toastTimer;
+function showToast(icon, msg) {
+  const el = document.getElementById('toast');
+  document.getElementById('toast-icon').textContent = icon;
+  document.getElementById('toast-msg').textContent = msg;
+  el.style.transform = 'translateX(-50%) translateY(0)';
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => {
+    el.style.transform = 'translateX(-50%) translateY(80px)';
+  }, 2800);
+}
+
+// ── INIT ───────────────────────────────────────────────────────
+// Start as udlejer view
+setRole('udlejer', document.querySelectorAll('.toggle-btn')[1]);
+animateRing(92);
+animateBars();
+</script>
+</body>
+</html>

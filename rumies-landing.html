@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rumies — Find en roomie du rent faktisk kan lide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;1,9..144,400&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20,400,1,0" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #F7F4EF;
+    --card: #FFFFFF;
+    --primary: #D97757;
+    --primary-hover: #C4633F;
+    --primary-soft: #F5E6DF;
+    --accent: #7B9E87;
+    --accent-soft: #E3EEE7;
+    --ink: #1A0F0A;
+    --ink2: #4A3528;
+    --ink3: #9C7B6E;
+    --border: #E8E0D8;
+    --gold: #C9A84C;
+    --gold-soft: #F5EDD0;
+    --shadow-sm: 0 1px 4px rgba(26,15,10,0.06);
+    --shadow-md: 0 4px 20px rgba(26,15,10,0.08);
+    --shadow-lg: 0 12px 48px rgba(26,15,10,0.11);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Manrope', sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(247,244,239,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 32px; height: 64px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+
+  .nav-logo { display: flex; align-items: center; gap: 9px; text-decoration: none; }
+  .nav-logo svg { width: 28px; height: 28px; }
+  .nav-logo-text { font-family: 'Fraunces', serif; font-size: 20px; font-weight: 700; color: var(--ink); letter-spacing: -0.3px; }
+
+  .nav-right { display: flex; align-items: center; gap: 10px; }
+
+  .nav-login {
+    padding: 8px 18px; border-radius: 999px;
+    font-size: 14px; font-weight: 600; color: var(--ink2);
+    border: 1.5px solid var(--border); background: var(--card);
+    text-decoration: none; transition: all 0.2s;
+  }
+  .nav-login:hover { border-color: var(--ink2); }
+
+  .nav-cta {
+    padding: 9px 20px; border-radius: 999px;
+    font-size: 14px; font-weight: 700; color: white;
+    background: var(--primary); border: none;
+    text-decoration: none; cursor: pointer;
+    transition: all 0.2s; font-family: 'Manrope', sans-serif;
+  }
+  .nav-cta:hover { background: var(--primary-hover); }
+
+  /* ── HERO ── */
+  .hero {
+    max-width: 1100px; margin: 0 auto;
+    padding: 80px 32px 60px;
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 60px; align-items: center;
+  }
+
+  .hero-label {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--primary-soft); color: var(--primary);
+    font-size: 12px; font-weight: 700; letter-spacing: 0.07em;
+    text-transform: uppercase; padding: 5px 12px; border-radius: 999px;
+    margin-bottom: 20px;
+  }
+  .hero-label .material-symbols-rounded { font-size: 14px; }
+
+  .hero-title {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(36px, 5vw, 54px);
+    font-weight: 700; line-height: 1.1;
+    color: var(--ink); margin-bottom: 20px;
+    letter-spacing: -0.5px;
+  }
+  .hero-title em { font-style: italic; color: var(--primary); }
+
+  .hero-sub {
+    font-size: 17px; color: var(--ink3);
+    line-height: 1.7; margin-bottom: 32px; max-width: 440px;
+  }
+
+  .hero-actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+
+  .btn-hero-primary {
+    padding: 15px 28px; border-radius: 14px;
+    background: var(--primary); color: white; border: none;
+    font-size: 16px; font-weight: 700; cursor: pointer;
+    font-family: 'Manrope', sans-serif; transition: all 0.2s;
+    display: flex; align-items: center; gap: 8px; text-decoration: none;
+  }
+  .btn-hero-primary:hover { background: var(--primary-hover); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(217,119,87,0.3); }
+  .btn-hero-primary .material-symbols-rounded { font-size: 20px; }
+
+  .btn-hero-secondary {
+    padding: 15px 24px; border-radius: 14px;
+    background: var(--card); color: var(--ink2);
+    border: 1.5px solid var(--border);
+    font-size: 15px; font-weight: 600; cursor: pointer;
+    font-family: 'Manrope', sans-serif; transition: all 0.2s;
+    display: flex; align-items: center; gap: 8px; text-decoration: none;
+  }
+  .btn-hero-secondary:hover { border-color: var(--ink2); color: var(--ink); }
+
+  .hero-trust {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 12px; color: var(--ink3); margin-top: 16px;
+  }
+  .hero-trust .material-symbols-rounded { font-size: 15px; color: var(--accent); }
+
+  /* Hero visual */
+  .hero-visual { position: relative; }
+
+  .hero-card-stack { position: relative; height: 420px; }
+
+  .hero-card {
+    position: absolute;
+    background: var(--card);
+    border-radius: 20px;
+    border: 1.5px solid var(--border);
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+    transition: transform 0.3s ease;
+  }
+
+  .hero-card.main {
+    width: 260px; left: 50%; top: 20px;
+    transform: translateX(-50%);
+    animation: floatCard 4s ease-in-out infinite;
+  }
+  .hero-card.left {
+    width: 200px; left: 0; top: 80px;
+    transform: rotate(-6deg);
+    animation: floatCard 4s 0.8s ease-in-out infinite;
+    opacity: 0.85;
+  }
+  .hero-card.right {
+    width: 200px; right: 0; top: 100px;
+    transform: rotate(5deg);
+    animation: floatCard 4s 1.6s ease-in-out infinite;
+    opacity: 0.85;
+  }
+
+  @keyframes floatCard {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50%       { transform: translateX(-50%) translateY(-8px); }
+  }
+  .hero-card.left  { animation-name: floatCardLeft; }
+  .hero-card.right { animation-name: floatCardRight; }
+  @keyframes floatCardLeft  { 0%,100%{transform:rotate(-6deg) translateY(0)} 50%{transform:rotate(-6deg) translateY(-6px)} }
+  @keyframes floatCardRight { 0%,100%{transform:rotate(5deg) translateY(0)}  50%{transform:rotate(5deg) translateY(-6px)} }
+
+  .hc-img {
+    height: 120px; display: flex; align-items: center; justify-content: center;
+    font-size: 44px; position: relative;
+  }
+  .hc-img.c1 { background: linear-gradient(135deg,#C8DDD0,#E3EEE7); }
+  .hc-img.c2 { background: linear-gradient(135deg,#BED4E8,#D5C8E8); }
+  .hc-img.c3 { background: linear-gradient(135deg,#F5C6BC,#F5DEC0); }
+
+  .hc-score {
+    position: absolute; bottom: 10px; left: 10px;
+    background: white; border-radius: 8px; padding: 4px 10px;
+    font-size: 12px; font-weight: 800; color: var(--accent);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+  .hc-verified {
+    position: absolute; top: 10px; right: 10px;
+    background: var(--accent); color: white;
+    border-radius: 6px; padding: 3px 7px;
+    font-size: 10px; font-weight: 700;
+    display: flex; align-items: center; gap: 2px;
+  }
+  .hc-verified .material-symbols-rounded { font-size: 11px; }
+
+  .hc-body { padding: 12px 14px; }
+  .hc-name { font-family: 'Fraunces', serif; font-size: 15px; font-weight: 700; color: var(--ink); margin-bottom: 2px; }
+  .hc-meta { font-size: 11px; color: var(--ink3); margin-bottom: 8px; }
+  .hc-tags { display: flex; gap: 4px; flex-wrap: wrap; }
+  .hc-tag { font-size: 10px; font-weight: 600; padding: 3px 8px; border-radius: 999px; background: var(--bg); color: var(--ink2); border: 1px solid var(--border); }
+
+  /* ── TRUST BAR ── */
+  .trust-bar {
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 20px 32px;
+    background: var(--card);
+  }
+  .trust-inner {
+    max-width: 1100px; margin: 0 auto;
+    display: flex; align-items: center; justify-content: center;
+    gap: 40px; flex-wrap: wrap;
+  }
+  .trust-item {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 13px; font-weight: 600; color: var(--ink2);
+  }
+  .trust-item .material-symbols-rounded { font-size: 18px; color: var(--primary); }
+
+  /* ── PROBLEM SECTION ── */
+  .section { max-width: 1100px; margin: 0 auto; padding: 80px 32px; }
+
+  .section-label {
+    font-size: 12px; font-weight: 700; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--primary); margin-bottom: 12px;
+    text-align: center;
+  }
+  .section-title {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(28px, 4vw, 40px); font-weight: 700;
+    color: var(--ink); text-align: center; line-height: 1.15;
+    margin-bottom: 16px;
+  }
+  .section-title em { font-style: italic; color: var(--primary); }
+  .section-sub {
+    font-size: 16px; color: var(--ink3); text-align: center;
+    max-width: 540px; margin: 0 auto 56px; line-height: 1.65;
+  }
+
+  /* ── FEATURES ── */
+  .features-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  .feature-card {
+    background: var(--card); border-radius: 20px;
+    border: 1px solid var(--border); padding: 28px;
+    box-shadow: var(--shadow-sm); transition: all 0.2s;
+  }
+  .feature-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+
+  .feature-icon {
+    width: 52px; height: 52px; border-radius: 16px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 18px;
+  }
+  .feature-icon .material-symbols-rounded { font-size: 26px; }
+  .feature-icon.orange { background: var(--primary-soft); }
+  .feature-icon.orange .material-symbols-rounded { color: var(--primary); }
+  .feature-icon.green  { background: var(--accent-soft); }
+  .feature-icon.green  .material-symbols-rounded { color: var(--accent); }
+  .feature-icon.gold   { background: var(--gold-soft); }
+  .feature-icon.gold   .material-symbols-rounded { color: var(--gold); }
+
+  .feature-title {
+    font-family: 'Fraunces', serif;
+    font-size: 18px; font-weight: 700; color: var(--ink); margin-bottom: 8px;
+  }
+  .feature-desc { font-size: 14px; color: var(--ink3); line-height: 1.65; }
+
+  /* ── HOW IT WORKS ── */
+  .steps-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 0; position: relative;
+  }
+  .steps-grid::before {
+    content: '';
+    position: absolute; top: 28px; left: calc(16.66% + 16px); right: calc(16.66% + 16px);
+    height: 2px; background: var(--border);
+  }
+
+  .step { text-align: center; padding: 0 20px; }
+  .step-num {
+    width: 56px; height: 56px; border-radius: 50%;
+    background: var(--primary); color: white;
+    font-family: 'Fraunces', serif; font-size: 22px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 20px; position: relative; z-index: 1;
+    box-shadow: 0 4px 16px rgba(217,119,87,0.3);
+  }
+  .step-title { font-family: 'Fraunces', serif; font-size: 17px; font-weight: 700; color: var(--ink); margin-bottom: 8px; }
+  .step-desc  { font-size: 14px; color: var(--ink3); line-height: 1.6; }
+
+  /* ── PRICING ── */
+  .pricing-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 16px; max-width: 860px; margin: 0 auto;
+  }
+
+  .price-card {
+    background: var(--card); border-radius: 20px;
+    border: 1.5px solid var(--border); padding: 28px;
+    box-shadow: var(--shadow-sm); position: relative;
+    transition: all 0.2s;
+  }
+  .price-card:hover { box-shadow: var(--shadow-md); }
+  .price-card.featured {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(217,119,87,0.1), var(--shadow-md);
+  }
+
+  .price-popular {
+    position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+    background: var(--primary); color: white;
+    font-size: 11px; font-weight: 700; padding: 4px 14px; border-radius: 999px;
+    white-space: nowrap;
+  }
+
+  .price-name { font-family: 'Fraunces', serif; font-size: 18px; font-weight: 700; color: var(--ink); margin-bottom: 8px; }
+  .price-amount {
+    font-family: 'Fraunces', serif;
+    font-size: 36px; font-weight: 700; color: var(--ink);
+    margin-bottom: 4px; line-height: 1;
+  }
+  .price-amount span { font-size: 16px; font-weight: 500; color: var(--ink3); }
+  .price-desc { font-size: 13px; color: var(--ink3); margin-bottom: 20px; }
+
+  .price-features { list-style: none; margin-bottom: 24px; display: flex; flex-direction: column; gap: 10px; }
+  .price-features li {
+    font-size: 13px; color: var(--ink2); display: flex; align-items: center; gap: 8px;
+  }
+  .price-features li .material-symbols-rounded { font-size: 16px; color: var(--accent); flex-shrink: 0; }
+  .price-features li.muted { color: var(--ink3); }
+  .price-features li.muted .material-symbols-rounded { color: var(--border); }
+
+  .price-btn {
+    width: 100%; padding: 13px; border-radius: 12px;
+    font-size: 14px; font-weight: 700; cursor: pointer;
+    font-family: 'Manrope', sans-serif; transition: all 0.2s;
+    border: 1.5px solid var(--border); background: var(--card); color: var(--ink2);
+  }
+  .price-btn:hover { border-color: var(--primary); color: var(--primary); }
+  .price-btn.primary { background: var(--primary); color: white; border-color: var(--primary); }
+  .price-btn.primary:hover { background: var(--primary-hover); }
+
+  /* ── CTA SECTION ── */
+  .cta-section {
+    background: var(--ink);
+    padding: 80px 32px;
+    text-align: center;
+  }
+  .cta-inner { max-width: 600px; margin: 0 auto; }
+  .cta-title {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(28px, 4vw, 42px); font-weight: 700;
+    color: white; line-height: 1.15; margin-bottom: 16px;
+  }
+  .cta-title em { font-style: italic; color: var(--primary); }
+  .cta-sub { font-size: 16px; color: rgba(255,255,255,0.6); margin-bottom: 32px; line-height: 1.6; }
+  .cta-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 16px 32px; border-radius: 14px;
+    background: var(--primary); color: white; border: none;
+    font-size: 16px; font-weight: 700; cursor: pointer;
+    font-family: 'Manrope', sans-serif; transition: all 0.2s;
+    text-decoration: none;
+  }
+  .cta-btn:hover { background: var(--primary-hover); transform: translateY(-1px); box-shadow: 0 6px 24px rgba(217,119,87,0.4); }
+  .cta-btn .material-symbols-rounded { font-size: 20px; }
+  .cta-note { font-size: 13px; color: rgba(255,255,255,0.4); margin-top: 14px; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--card); border-top: 1px solid var(--border);
+    padding: 28px 32px;
+  }
+  .footer-inner {
+    max-width: 1100px; margin: 0 auto;
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 16px;
+  }
+  .footer-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+  .footer-logo-text { font-family: 'Fraunces', serif; font-size: 16px; font-weight: 700; color: var(--ink); }
+  .footer-copy { font-size: 13px; color: var(--ink3); }
+  .footer-links { display: flex; gap: 20px; }
+  .footer-links a { font-size: 13px; color: var(--ink3); text-decoration: none; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--primary); }
+
+  @media (max-width: 768px) {
+    nav { padding: 0 16px; }
+    .hero { grid-template-columns: 1fr; padding: 48px 16px 40px; gap: 40px; }
+    .hero-visual { display: none; }
+    .section { padding: 56px 16px; }
+    .features-grid { grid-template-columns: 1fr; }
+    .steps-grid { grid-template-columns: 1fr; gap: 32px; }
+    .steps-grid::before { display: none; }
+    .pricing-grid { grid-template-columns: 1fr; max-width: 400px; }
+    .ct-header, .ct-row { grid-template-columns: 1.5fr 0.8fr 1.5fr; }
+    .ct-score:first-of-type { display: none; }
+    footer { padding: 24px 16px; }
+    .footer-inner { flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="rumies-landing.html">
+    <svg viewBox="0 0 28 28" fill="none">
+      <polygon points="14,2 26,24 2,24" fill="#D97757"/>
+      <polygon points="14,7 23,22 5,22" fill="#F7F4EF" opacity="0.3"/>
+    </svg>
+    <span class="nav-logo-text">Rumies</span>
+  </a>
+  <div class="nav-right">
+    <a class="nav-login" href="rumies-matches.html">Log ind</a>
+    <a class="nav-cta" href="rumies-onboarding.html">Kom i gang</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section>
+  <div class="hero">
+    <div class="hero-left">
+      <div class="hero-label">
+        <span class="material-symbols-rounded">favorite</span>
+        Dansk roommate-matching
+      </div>
+      <h1 class="hero-title">Find en roomie du <em>rent faktisk</em> kan lide at bo med</h1>
+      <p class="hero-sub">Rumies matcher dig med kommende roomies baseret på livsstil, søvnvaner og hverdagsrytme — ikke bare et tilfældigt Facebook-opslag.</p>
+      <div class="hero-actions">
+        <a class="btn-hero-primary" href="rumies-onboarding.html">
+          <span class="material-symbols-rounded">arrow_forward</span>
+          Opret gratis profil
+        </a>
+        <a class="btn-hero-secondary" href="rumies-matches.html">
+          <span class="material-symbols-rounded">play_circle</span>
+          Se hvordan det virker
+        </a>
+      </div>
+      <div class="hero-trust">
+        <span class="material-symbols-rounded">lock</span>
+        Gratis at starte · Ingen skjulte abonnementer
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <div class="hero-card-stack">
+        <!-- Left card -->
+        <div class="hero-card left">
+          <div class="hc-img c2">👨‍💻
+            <div class="hc-score">87% match</div>
+          </div>
+          <div class="hc-body">
+            <div class="hc-name">Mikkel, 25</div>
+            <div class="hc-meta">Vesterbro · 7.500 kr/md</div>
+            <div class="hc-tags">
+              <span class="hc-tag">Ikke-ryger</span>
+              <span class="hc-tag">Ryddelig</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Main card -->
+        <div class="hero-card main">
+          <div class="hc-img c1">👩‍🎓
+            <div class="hc-score">92% match</div>
+          </div>
+          <div class="hc-body">
+            <div class="hc-name">Sofie, 24</div>
+            <div class="hc-meta">Nørrebro · 6.500 kr/md</div>
+            <div class="hc-tags">
+              <span class="hc-tag">Morgenmenneske</span>
+              <span class="hc-tag">Vegetar</span>
+              <span class="hc-tag">Ikke-ryger</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right card -->
+        <div class="hero-card right">
+          <div class="hc-img c3">🎨
+            <div class="hc-score">84% match</div>
+          </div>
+          <div class="hc-body">
+            <div class="hc-name">Emma, 23</div>
+            <div class="hc-meta">Trøjborg, Aarhus · 4.800 kr/md</div>
+            <div class="hc-tags">
+              <span class="hc-tag">Dyrevenlig</span>
+              <span class="hc-tag">Vegetar</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST BAR -->
+<div class="trust-bar">
+  <div class="trust-inner">
+    <div class="trust-item"><span class="material-symbols-rounded">verified</span>Verificerede profiler</div>
+    <div class="trust-item"><span class="material-symbols-rounded">favorite</span>Matching på livsstil</div>
+    <div class="trust-item"><span class="material-symbols-rounded">chat_bubble</span>Beskeder inden for platformen</div>
+    <div class="trust-item"><span class="material-symbols-rounded">lock</span>Ingen skjulte abonnementer</div>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<section class="section" style="padding-top:0">
+  <div class="section-label">Hvad gør Rumies anderledes</div>
+  <h2 class="section-title">Bygget på <em>tillid</em></h2>
+  <p class="section-sub">Tre kernefunktioner der løser de problemer eksisterende platforme aldrig har taget seriøst.</p>
+
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon orange"><span class="material-symbols-rounded">verified</span></div>
+      <div class="feature-title">Verificerede profiler</div>
+      <div class="feature-desc">Alle brugere bekræfter deres identitet ved oprettelse. Ingen falske profiler, ingen svindel — kun rigtige mennesker der leder efter et hjem.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon green"><span class="material-symbols-rounded">favorite</span></div>
+      <div class="feature-title">Livsstilsmatching</div>
+      <div class="feature-desc">En 12-spørgsmåls quiz kortlægger dine vaner på tværs af søvn, ryddelighed, mad og sociale præferencer. Algoritmen finder dit bedste match.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon gold"><span class="material-symbols-rounded">chat_bubble</span></div>
+      <div class="feature-title">Sikkert beskedsystem</div>
+      <div class="feature-desc">Kommuniker direkte på platformen — ingen behov for at udveksle private numre med fremmede, før du er tryg ved personen.</div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="section" style="background:var(--card);max-width:100%;padding:80px 0">
+  <div style="max-width:1100px;margin:0 auto;padding:0 32px">
+    <div class="section-label">Sådan virker det</div>
+    <h2 class="section-title" style="margin-bottom:56px">Tre trin til dit <em>næste hjem</em></h2>
+    <div class="steps-grid">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-title">Opret profil</div>
+        <div class="step-desc">Vælg din rolle, udfyld livsstilsquizzen og angiv dit budget eller din lejlighed. Tager under 5 minutter.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-title">Se dine matches</div>
+        <div class="step-desc">Algoritmen beregner et match-score baseret på livsstil, by og budget. Se de bedste matches med det samme.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-title">Tag kontakt</div>
+        <div class="step-desc">Send en besked direkte på platformen — ingen private numre nødvendige. Arranger en fremvisning og find din næste roomie.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="section">
+  <div class="section-label">Priser</div>
+  <h2 class="section-title">Simpelt og <em>gennemsigtigt</em></h2>
+  <p class="section-sub">Ingen autofornyelse uden varsel. Ingen skjulte gebyrer. Du betaler kun for mere synlighed — aldrig for at bruge platformen.</p>
+
+  <div class="pricing-grid">
+    <div class="price-card">
+      <div class="price-name">Gratis</div>
+      <div class="price-amount">0 <span>kr/md</span></div>
+      <div class="price-desc">Kom i gang uden kreditkort</div>
+      <ul class="price-features">
+        <li><span class="material-symbols-rounded">check_circle</span>Opret profil</li>
+        <li><span class="material-symbols-rounded">check_circle</span>Livsstilsquiz</li>
+        <li><span class="material-symbols-rounded">check_circle</span>Se dine 8 bedste matches</li>
+        <li><span class="material-symbols-rounded">check_circle</span>Modtag beskeder</li>
+        <li class="muted"><span class="material-symbols-rounded">remove_circle</span>Send ubegrænsede beskeder</li>
+        <li class="muted"><span class="material-symbols-rounded">remove_circle</span>Se hvem der har liket dig</li>
+      </ul>
+      <button class="price-btn" onclick="window.location='rumies-onboarding.html'">Opret gratis profil</button>
+    </div>
+
+    <div class="price-card featured">
+      <div class="price-popular">Mest populær</div>
+      <div class="price-name">Premium</div>
+      <div class="price-amount">49 <span>kr/md</span></div>
+      <div class="price-desc">Til dig der vil finde match hurtigere</div>
+      <ul class="price-features">
+        <li><span class="material-symbols-rounded">check_circle</span>Alt i Gratis</li>
+        <li><span class="material-symbols-rounded">check_circle</span>Se alle matches</li>
+        <li><span class="material-symbols-rounded">check_circle</span>Send ubegrænsede beskeder</li>
+        <li><span class="material-symbols-rounded">check_circle</span>Se hvem der har liket dig</li>
+        <li><span class="material-symbols-rounded">check_circle</span>Boost din synlighed</li>
+        <li class="muted"><span class="material-symbols-rounded">remove_circle</span>Prioritet i matchalgoritmen</li>
+      </ul>
+      <button class="price-btn primary" onclick="window.location='rumies-onboarding.html'">Prøv Premium</button>
+    </div>
+
+    <div class="price-card">
+      <div class="price-name">Premium+</div>
+      <div class="price-amount">99 <span>kr/md</span></div>
+      <div class="price-desc">Maksimal synlighed og prioritet</div>
+      <ul class="price-features">
+        <li><span class="material-symbols-rounded">check_circle</span>Alt i Premium</li>
+        <li><span class="material-symbols-rounded">check_circle</span>Prioritet i matchalgoritmen</li>
+        <li><span class="material-symbols-rounded">check_circle</span>Verificeret badge</li>
+        <li><span class="material-symbols-rounded">check_circle</span>Avancerede filtre</li>
+        <li><span class="material-symbols-rounded">check_circle</span>Tidlig adgang til nye features</li>
+        <li><span class="material-symbols-rounded">check_circle</span>Prioriteret support</li>
+      </ul>
+      <button class="price-btn" onclick="window.location='rumies-onboarding.html'">Vælg Premium+</button>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-inner">
+    <h2 class="cta-title">Klar til at finde din næste <em>roomie?</em></h2>
+    <p class="cta-sub">Opret din gratis profil på under 5 minutter og se hvem der matcher din livsstil i dag.</p>
+    <a class="cta-btn" href="rumies-onboarding.html">
+      <span class="material-symbols-rounded">arrow_forward</span>
+      Kom i gang — det er gratis
+    </a>
+    <div class="cta-note">Ingen kreditkort krævet · Ingen skjulte abonnementer</div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <a class="footer-logo" href="rumies-landing.html">
+      <svg viewBox="0 0 28 28" fill="none" width="22" height="22">
+        <polygon points="14,2 26,24 2,24" fill="#D97757"/>
+        <polygon points="14,7 23,22 5,22" fill="#F7F4EF" opacity="0.3"/>
+      </svg>
+      <span class="footer-logo-text">Rumies</span>
+    </a>
+    <span class="footer-copy">© 2026 Rumies.dk — Bygget i Danmark 🇩🇰</span>
+    <div class="footer-links">
+      <a href="#">Privatlivspolitik</a>
+      <a href="#">Vilkår</a>
+      <a href="#">Kontakt</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

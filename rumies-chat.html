@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rumies — Beskeder</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20,400,1,0" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #F7F4EF;
+    --card: #FFFFFF;
+    --primary: #D97757;
+    --primary-hover: #C4633F;
+    --primary-soft: #F5E6DF;
+    --accent: #7B9E87;
+    --accent-soft: #E3EEE7;
+    --ink: #1A0F0A;
+    --ink2: #4A3528;
+    --ink3: #9C7B6E;
+    --border: #E8E0D8;
+    --gold: #C9A84C;
+    --gold-soft: #F5EDD0;
+    --shadow-sm: 0 1px 4px rgba(26,15,10,0.06);
+    --shadow-md: 0 4px 20px rgba(26,15,10,0.08);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Manrope', sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    flex-shrink: 0;
+    background: rgba(247,244,239,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 32px; height: 64px;
+    display: flex; align-items: center; justify-content: space-between;
+    z-index: 50;
+  }
+
+  .nav-logo { display: flex; align-items: center; gap: 9px; text-decoration: none; }
+  .nav-logo svg { width: 28px; height: 28px; }
+  .nav-logo-text { font-family: 'Fraunces', serif; font-size: 20px; font-weight: 700; color: var(--ink); letter-spacing: -0.3px; }
+
+  .nav-links { display: flex; align-items: center; gap: 4px; }
+  .nav-link {
+    display: flex; align-items: center; gap: 6px;
+    padding: 8px 14px; border-radius: 10px;
+    font-size: 14px; font-weight: 500; color: var(--ink2);
+    cursor: pointer; border: none; background: none;
+    font-family: 'Manrope', sans-serif; transition: all 0.2s; text-decoration: none;
+  }
+  .nav-link:hover { background: var(--border); color: var(--ink); }
+  .nav-link.active { background: var(--primary); color: white; }
+  .nav-link .material-symbols-rounded { font-size: 18px; }
+
+  .nav-avatar {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: var(--accent-soft); border: 2px solid var(--border);
+    display: flex; align-items: center; justify-content: center; cursor: pointer;
+  }
+
+  /* ── CHAT LAYOUT ── */
+  .chat-layout {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    overflow: hidden;
+  }
+
+  /* ── SIDEBAR ── */
+  .chat-sidebar {
+    background: var(--card);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .sidebar-header {
+    padding: 20px 20px 16px;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+
+  .sidebar-title {
+    font-family: 'Fraunces', serif;
+    font-size: 22px; font-weight: 700;
+    color: var(--ink); margin-bottom: 12px;
+  }
+
+  .search-wrap {
+    position: relative;
+  }
+  .search-wrap .material-symbols-rounded {
+    position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+    font-size: 18px; color: var(--ink3); pointer-events: none;
+  }
+  .search-input {
+    width: 100%; padding: 10px 14px 10px 38px;
+    border-radius: 999px;
+    border: 1.5px solid var(--border);
+    background: var(--bg);
+    font-size: 14px; font-family: 'Manrope', sans-serif;
+    color: var(--ink); outline: none;
+    transition: border-color 0.2s;
+  }
+  .search-input:focus { border-color: var(--primary); }
+  .search-input::placeholder { color: var(--ink3); }
+
+  /* Conversation list */
+  .conv-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 8px 0;
+  }
+  .conv-list::-webkit-scrollbar { width: 4px; }
+  .conv-list::-webkit-scrollbar-track { background: transparent; }
+  .conv-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+  .conv-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 20px;
+    cursor: pointer; transition: background 0.15s;
+    border-left: 3px solid transparent;
+    position: relative;
+  }
+  .conv-item:hover { background: var(--bg); }
+  .conv-item.active { background: var(--primary-soft); border-left-color: var(--primary); }
+
+  .conv-avatar {
+    width: 48px; height: 48px; border-radius: 50%;
+    background: var(--bg); flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; border: 2px solid var(--border);
+    position: relative;
+  }
+  .conv-avatar .online-dot {
+    position: absolute; bottom: 1px; right: 1px;
+    width: 12px; height: 12px; border-radius: 50%;
+    background: var(--accent); border: 2px solid var(--card);
+  }
+
+  .conv-info { flex: 1; min-width: 0; }
+  .conv-name-row {
+    display: flex; align-items: baseline; justify-content: space-between;
+    margin-bottom: 3px;
+  }
+  .conv-name { font-size: 14px; font-weight: 700; color: var(--ink); }
+  .conv-time { font-size: 11px; color: var(--ink3); flex-shrink: 0; }
+  .conv-time.unread { color: var(--primary); font-weight: 700; }
+
+  .conv-preview { font-size: 13px; color: var(--ink3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .conv-preview.unread { color: var(--ink2); font-weight: 600; }
+
+  .conv-unread-badge {
+    width: 20px; height: 20px; border-radius: 50%;
+    background: var(--primary); color: white;
+    font-size: 11px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .match-chip {
+    display: inline-flex; align-items: center; gap: 3px;
+    background: var(--accent-soft); color: var(--accent);
+    font-size: 10px; font-weight: 700;
+    padding: 2px 7px; border-radius: 999px; margin-top: 4px;
+  }
+
+  /* ── MAIN CHAT ── */
+  .chat-main {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: var(--bg);
+  }
+
+  /* Chat header */
+  .chat-header {
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 24px;
+    display: flex; align-items: center; justify-content: space-between;
+    flex-shrink: 0;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .chat-header-left { display: flex; align-items: center; gap: 14px; }
+
+  .chat-header-avatar {
+    width: 44px; height: 44px; border-radius: 50%;
+    background: var(--bg);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; border: 2px solid var(--border);
+    flex-shrink: 0; position: relative;
+  }
+  .chat-header-avatar .online-dot {
+    position: absolute; bottom: 1px; right: 1px;
+    width: 11px; height: 11px; border-radius: 50%;
+    background: var(--accent); border: 2px solid var(--card);
+  }
+
+  .chat-header-name {
+    font-family: 'Fraunces', serif;
+    font-size: 17px; font-weight: 700; color: var(--ink);
+    display: flex; align-items: center; gap: 6px;
+  }
+  .chat-header-name .material-symbols-rounded { font-size: 16px; color: var(--accent); }
+
+  .chat-header-meta {
+    font-size: 12px; color: var(--ink3); margin-top: 2px;
+    display: flex; align-items: center; gap: 8px;
+  }
+
+  .header-match-badge {
+    background: var(--accent); color: white;
+    font-size: 11px; font-weight: 700;
+    padding: 3px 9px; border-radius: 999px;
+  }
+
+  .online-indicator {
+    display: flex; align-items: center; gap: 4px;
+    font-size: 12px; color: var(--accent); font-weight: 600;
+  }
+  .online-indicator span.dot {
+    width: 7px; height: 7px; border-radius: 50%; background: var(--accent);
+  }
+
+  .chat-header-actions { display: flex; align-items: center; gap: 6px; }
+  .header-btn {
+    width: 38px; height: 38px; border-radius: 10px;
+    border: 1.5px solid var(--border); background: var(--card);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: all 0.2s; color: var(--ink2);
+  }
+  .header-btn:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-soft); }
+  .header-btn .material-symbols-rounded { font-size: 19px; }
+
+  /* Messages area */
+  .messages-area {
+    flex: 1;
+    overflow-y: auto;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .messages-area::-webkit-scrollbar { width: 4px; }
+  .messages-area::-webkit-scrollbar-track { background: transparent; }
+  .messages-area::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+  /* Date divider */
+  .date-divider {
+    display: flex; align-items: center; gap: 12px;
+    margin: 16px 0 12px;
+  }
+  .date-divider::before, .date-divider::after {
+    content: ''; flex: 1; height: 1px; background: var(--border);
+  }
+  .date-divider span {
+    font-size: 11px; font-weight: 700; color: var(--ink3);
+    text-transform: uppercase; letter-spacing: 0.06em;
+    white-space: nowrap;
+  }
+
+  /* Message bubbles */
+  .msg-group {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-bottom: 12px;
+  }
+  .msg-group.mine { align-items: flex-end; }
+  .msg-group.theirs { align-items: flex-start; }
+
+  .msg-bubble {
+    max-width: 68%;
+    padding: 12px 16px;
+    font-size: 14px; line-height: 1.65;
+    position: relative;
+    animation: bubbleIn 0.25s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  @keyframes bubbleIn {
+    from { opacity: 0; transform: translateY(8px) scale(0.97); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .msg-group.theirs .msg-bubble {
+    background: var(--card);
+    color: var(--ink);
+    border-radius: 18px 18px 18px 4px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .msg-group.mine .msg-bubble {
+    background: var(--primary);
+    color: white;
+    border-radius: 18px 18px 4px 18px;
+  }
+
+  .msg-meta {
+    display: flex; align-items: center; gap: 5px;
+    font-size: 11px; color: var(--ink3);
+    padding: 0 4px;
+    margin-top: 2px;
+  }
+  .msg-meta .material-symbols-rounded { font-size: 14px; color: var(--primary); }
+
+  /* Typing indicator */
+  .typing-indicator {
+    display: flex; align-items: center; gap: 10px;
+    padding: 4px 0; margin-bottom: 8px;
+  }
+  .typing-avatar {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: var(--bg); border: 2px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; flex-shrink: 0;
+  }
+  .typing-bubble {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 18px 18px 18px 4px;
+    padding: 12px 16px;
+    display: flex; gap: 4px; align-items: center;
+    box-shadow: var(--shadow-sm);
+  }
+  .typing-dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--ink3);
+    animation: typingBounce 1.2s infinite ease-in-out;
+  }
+  .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+  .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes typingBounce {
+    0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+    30%           { transform: translateY(-5px); opacity: 1; }
+  }
+
+  /* Match info banner */
+  .match-banner {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 16px 20px;
+    display: flex; align-items: center; gap: 16px;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow-sm);
+  }
+  .match-banner-score {
+    width: 48px; height: 48px; border-radius: 50%;
+    background: var(--accent-soft);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px; font-weight: 800; color: var(--accent);
+    flex-shrink: 0;
+  }
+  .match-banner-text {}
+  .match-banner-title { font-size: 14px; font-weight: 700; color: var(--ink); margin-bottom: 2px; }
+  .match-banner-sub   { font-size: 12px; color: var(--ink3); }
+  .match-banner-tags  { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
+  .match-banner-tag {
+    font-size: 11px; font-weight: 600; color: var(--accent);
+    background: var(--accent-soft); padding: 3px 9px; border-radius: 999px;
+  }
+  .match-banner-actions { margin-left: auto; display: flex; gap: 8px; flex-shrink: 0; }
+  .banner-btn {
+    padding: 8px 14px; border-radius: 10px;
+    font-size: 12px; font-weight: 700;
+    cursor: pointer; transition: all 0.2s;
+    font-family: 'Manrope', sans-serif;
+    display: flex; align-items: center; gap: 5px;
+  }
+  .banner-btn.primary { background: var(--primary); color: white; border: none; }
+  .banner-btn.primary:hover { background: var(--primary-hover); }
+  .banner-btn.secondary { background: var(--card); color: var(--ink2); border: 1.5px solid var(--border); }
+  .banner-btn.secondary:hover { border-color: var(--ink2); }
+  .banner-btn .material-symbols-rounded { font-size: 15px; }
+
+  /* Input area */
+  .input-area {
+    padding: 16px 24px 20px;
+    background: var(--card);
+    border-top: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+
+  .input-wrap {
+    display: flex; align-items: flex-end; gap: 10px;
+    max-width: 100%;
+  }
+
+  .input-btn {
+    width: 40px; height: 40px; border-radius: 10px;
+    border: 1.5px solid var(--border); background: var(--bg);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: all 0.2s; color: var(--ink3);
+    flex-shrink: 0; margin-bottom: 1px;
+  }
+  .input-btn:hover { border-color: var(--primary); color: var(--primary); }
+  .input-btn .material-symbols-rounded { font-size: 20px; }
+
+  .input-box {
+    flex: 1;
+    background: var(--bg);
+    border: 1.5px solid var(--border);
+    border-radius: 20px;
+    padding: 11px 52px 11px 18px;
+    font-size: 14px; font-family: 'Manrope', sans-serif;
+    color: var(--ink); resize: none; outline: none;
+    min-height: 44px; max-height: 120px;
+    line-height: 1.5; transition: border-color 0.2s;
+  }
+  .input-box:focus { border-color: var(--primary); background: var(--card); }
+  .input-box::placeholder { color: var(--ink3); }
+
+  .input-field-wrap { flex: 1; position: relative; }
+
+  .send-btn {
+    position: absolute; right: 6px; bottom: 6px;
+    width: 34px; height: 34px; border-radius: 50%;
+    background: var(--primary); color: white; border: none;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .send-btn:hover { background: var(--primary-hover); transform: scale(1.05); }
+  .send-btn .material-symbols-rounded { font-size: 17px; margin-left: 1px; }
+
+  /* Suggestions */
+  .quick-replies {
+    display: flex; gap: 8px; flex-wrap: wrap;
+    margin-bottom: 10px;
+  }
+  .quick-reply {
+    padding: 7px 14px; border-radius: 999px;
+    font-size: 13px; font-weight: 500;
+    border: 1.5px solid var(--border); background: var(--card);
+    color: var(--ink2); cursor: pointer; transition: all 0.2s;
+    font-family: 'Manrope', sans-serif;
+  }
+  .quick-reply:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-soft); }
+
+  /* Empty state */
+  .empty-chat {
+    flex: 1; display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 12px; color: var(--ink3); text-align: center;
+    padding: 40px;
+  }
+  .empty-chat .material-symbols-rounded { font-size: 48px; color: var(--border); }
+  .empty-chat-title { font-family: 'Fraunces', serif; font-size: 20px; font-weight: 600; color: var(--ink2); }
+  .empty-chat-sub   { font-size: 14px; color: var(--ink3); }
+
+  @media (max-width: 768px) {
+    .chat-sidebar { display: none; }
+    nav { padding: 0 16px; }
+    .nav-links { display: none; }
+    .messages-area { padding: 16px; }
+    .chat-header { padding: 12px 16px; }
+    .input-area { padding: 12px 16px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="rumies-landing.html">
+    <svg viewBox="0 0 28 28" fill="none">
+      <polygon points="14,2 26,24 2,24" fill="#D97757"/>
+      <polygon points="14,7 23,22 5,22" fill="#F7F4EF" opacity="0.3"/>
+    </svg>
+    <span class="nav-logo-text">Rumies</span>
+  </a>
+  <div class="nav-links">
+    <a class="nav-link" href="rumies-matches.html"><span class="material-symbols-rounded">search</span>Søg</a>
+    <a class="nav-link" href="rumies-matches.html"><span class="material-symbols-rounded">favorite</span>Matches</a>
+    <a class="nav-link active" href="rumies-chat.html"><span class="material-symbols-rounded">chat_bubble</span>Beskeder</a>
+    <a class="nav-link" href="rumies-dashboard-søgende.html"><span class="material-symbols-rounded">person</span>Profil</a>
+  </div>
+  <a class="nav-avatar" href="rumies-dashboard-søgende.html">
+    <span class="material-symbols-rounded" style="font-size:20px;color:var(--ink3)">person</span>
+  </a>
+</nav>
+
+<div class="chat-layout">
+
+  <!-- ── SIDEBAR ── -->
+  <aside class="chat-sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-title">Beskeder</div>
+      <div class="search-wrap">
+        <span class="material-symbols-rounded">search</span>
+        <input class="search-input" type="text" placeholder="Søg i samtaler...">
+      </div>
+    </div>
+
+    <div class="conv-list" id="conv-list"></div>
+  </aside>
+
+  <!-- ── MAIN CHAT ── -->
+  <main class="chat-main" id="chat-main">
+
+    <!-- Header -->
+    <div class="chat-header" id="chat-header"></div>
+
+    <!-- Messages -->
+    <div class="messages-area" id="messages-area"></div>
+
+    <!-- Input -->
+    <div class="input-area" id="input-area"></div>
+
+  </main>
+</div>
+
+<script>
+// ── DATA ───────────────────────────────────────────────────────
+const CONVERSATIONS = [
+  {
+    id: 1,
+    name: "Sofie",
+    emoji: "👩‍🎓",
+    location: "Nørrebro, København",
+    job: "Studerende, CBS",
+    score: 92,
+    online: true,
+    verified: true,
+    unread: 2,
+    lastMsg: "Hej! Er værelset stadig ledigt?",
+    lastTime: "10:42",
+    messages: [
+      { from: "them", text: "Hej! Er værelset stadig ledigt? Jeg så din profil og vi har et 92% match! 🤩", time: "10:42" },
+      { from: "them", text: "Jeg læser cand.merc på CBS og elsker brætspil og rolig kaffe om søndagen. Tænker vi kunne passe super godt sammen.", time: "10:43" },
+      { from: "me",   text: "Hej Sofie! 👋 Ja, det er det! Fedt at høre — jeg elsker også brætspil, specielt Catan.", time: "10:55", read: true },
+      { from: "me",   text: "Har du tid til at komme forbi til en kop kaffe og se lejligheden i denne uge? Måske torsdag?", time: "10:56", read: true },
+    ],
+    sharedTraits: ["Morgenmenneske", "Ikke-ryger", "Ryddelig"],
+  },
+  {
+    id: 2,
+    name: "Mikkel",
+    emoji: "👨‍💻",
+    location: "Vesterbro, København",
+    job: "Softwareudvikler",
+    score: 87,
+    online: false,
+    verified: true,
+    unread: 0,
+    lastMsg: "Lyder super hyggeligt!",
+    lastTime: "I går",
+    messages: [
+      { from: "me",   text: "Hej Mikkel! Jeg så dit profil — vi matcher 87%. Er du stadig på udkig?", time: "I går 14:20", read: true },
+      { from: "them", text: "Hej! Ja, det er jeg. Lyder super hyggeligt!", time: "I går 15:03" },
+    ],
+    sharedTraits: ["Ikke-ryger", "Ryddelig"],
+  },
+  {
+    id: 3,
+    name: "Emma",
+    emoji: "🎨",
+    location: "Trøjborg, Aarhus",
+    job: "Studerende, AU",
+    score: 84,
+    online: true,
+    verified: false,
+    unread: 0,
+    lastMsg: "Perfekt, vi ses onsdag kl. 16 🙌",
+    lastTime: "Tirs",
+    messages: [
+      { from: "them", text: "Hej! Jeg er meget interesseret i dit værelse. Hvornår er det ledigt fra?", time: "Tirs 09:12" },
+      { from: "me",   text: "Hej Emma! Det er ledigt fra 1. februar. Vil du komme og se det?", time: "Tirs 11:30", read: true },
+      { from: "them", text: "Ja, meget gerne! Er onsdag den 22. muligt?", time: "Tirs 11:45" },
+      { from: "me",   text: "Onsdag kl. 16 passer perfekt!", time: "Tirs 12:00", read: true },
+      { from: "them", text: "Perfekt, vi ses onsdag kl. 16 🙌", time: "Tirs 12:05" },
+    ],
+    sharedTraits: ["Morgenmenneske", "Dyrevenlig"],
+  },
+];
+
+let activeConv = 1;
+let showTyping = true;
+
+// ── RENDER CONVERSATION LIST ───────────────────────────────────
+function renderConvList() {
+  const list = document.getElementById('conv-list');
+  list.innerHTML = CONVERSATIONS.map(c => `
+    <div class="conv-item ${c.id === activeConv ? 'active' : ''}" onclick="openConv(${c.id})">
+      <div class="conv-avatar">
+        ${c.emoji}
+        ${c.online ? '<div class="online-dot"></div>' : ''}
+      </div>
+      <div class="conv-info">
+        <div class="conv-name-row">
+          <div class="conv-name">${c.name}</div>
+          <div class="conv-time ${c.unread ? 'unread' : ''}">${c.lastTime}</div>
+        </div>
+        <div class="conv-preview ${c.unread ? 'unread' : ''}">${c.lastMsg}</div>
+        <div class="match-chip">⚡ ${c.score}% match</div>
+      </div>
+      ${c.unread ? `<div class="conv-unread-badge">${c.unread}</div>` : ''}
+    </div>`).join('');
+}
+
+// ── RENDER ACTIVE CHAT ─────────────────────────────────────────
+function renderChat(convId) {
+  const c = CONVERSATIONS.find(x => x.id === convId);
+  if (!c) return;
+
+  // Header
+  document.getElementById('chat-header').innerHTML = `
+    <div class="chat-header-left">
+      <div class="chat-header-avatar">
+        ${c.emoji}
+        ${c.online ? '<div class="online-dot"></div>' : ''}
+      </div>
+      <div>
+        <div class="chat-header-name">
+          ${c.name}
+          ${c.verified ? '<span class="material-symbols-rounded">verified</span>' : ''}
+        </div>
+        <div class="chat-header-meta">
+          <span class="header-match-badge">⚡ ${c.score}% Match</span>
+          ${c.online
+            ? `<span class="online-indicator"><span class="dot"></span>Online</span>`
+            : `<span style="color:var(--ink3)">Offline</span>`}
+        </div>
+      </div>
+    </div>
+    <div class="chat-header-actions">
+      <button class="header-btn" title="Se profil" onclick="window.location='rumies-profile.html'">
+        <span class="material-symbols-rounded">person</span>
+      </button>
+      <button class="header-btn" title="Flere muligheder">
+        <span class="material-symbols-rounded">more_vert</span>
+      </button>
+    </div>`;
+
+  // Messages
+  const area = document.getElementById('messages-area');
+
+  // Build match banner + messages
+  const tagsHtml = c.sharedTraits.map(t => `<span class="match-banner-tag">${t}</span>`).join('');
+
+  let html = `
+    <div class="match-banner">
+      <div class="match-banner-score">${c.score}%</div>
+      <div class="match-banner-text">
+        <div class="match-banner-title">I har ${c.score}% livsstilsmatch</div>
+        <div class="match-banner-sub">Fælles træk:</div>
+        <div class="match-banner-tags">${tagsHtml}</div>
+      </div>
+      <div class="match-banner-actions">
+        <button class="banner-btn secondary" onclick="window.location='rumies-profile.html'">
+          <span class="material-symbols-rounded">person</span>Profil
+        </button>
+      </div>
+    </div>
+    <div class="date-divider"><span>I dag</span></div>`;
+
+  // Group consecutive messages from same sender
+  let lastFrom = null;
+  c.messages.forEach((msg, i) => {
+    const isNew = msg.from !== lastFrom;
+    if (isNew && lastFrom !== null) html += '</div>';
+    if (isNew) html += `<div class="msg-group ${msg.from === 'me' ? 'mine' : 'theirs'}" style="animation-delay:${i * 0.05}s">`;
+
+    html += `<div class="msg-bubble">${msg.text}</div>`;
+
+    const isLast = i === c.messages.length - 1 || c.messages[i+1].from !== msg.from;
+    if (isLast) {
+      html += `<div class="msg-meta">
+        <span>${msg.time}</span>
+        ${msg.from === 'me' && msg.read ? '<span class="material-symbols-rounded">done_all</span>' : ''}
+      </div>`;
+    }
+    lastFrom = msg.from;
+  });
+  html += '</div>';
+
+  // Typing indicator
+  if (showTyping && c.online) {
+    html += `
+      <div class="typing-indicator">
+        <div class="typing-avatar">${c.emoji}</div>
+        <div class="typing-bubble">
+          <div class="typing-dot"></div>
+          <div class="typing-dot"></div>
+          <div class="typing-dot"></div>
+        </div>
+      </div>`;
+  }
+
+  area.innerHTML = html;
+  area.scrollTop = area.scrollHeight;
+
+  // Quick replies + input
+  document.getElementById('input-area').innerHTML = `
+    <div class="quick-replies" id="quick-replies">
+      <button class="quick-reply" onclick="sendQuick(this, 'Ja, torsdag kl. 17 passer fint! 🙌')">Ja, torsdag kl. 17 passer fint!</button>
+      <button class="quick-reply" onclick="sendQuick(this, 'Kan vi finde en anden dag?')">Kan vi finde en anden dag?</button>
+      <button class="quick-reply" onclick="sendQuick(this, 'Hvad er huslejen inkl. forbrug?')">Hvad er huslejen inkl. forbrug?</button>
+    </div>
+    <div class="input-wrap">
+      <button class="input-btn" title="Vedhæft fil">
+        <span class="material-symbols-rounded">attach_file</span>
+      </button>
+      <div class="input-field-wrap">
+        <textarea class="input-box" id="msg-input" placeholder="Skriv en besked til ${c.name}..."
+          rows="1" onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+        <button class="send-btn" onclick="sendMsg()">
+          <span class="material-symbols-rounded">send</span>
+        </button>
+      </div>
+    </div>`;
+}
+
+// ── OPEN CONVERSATION ──────────────────────────────────────────
+function openConv(id) {
+  activeConv = id;
+  // Clear unread
+  const c = CONVERSATIONS.find(x => x.id === id);
+  if (c) c.unread = 0;
+  renderConvList();
+  renderChat(id);
+}
+
+// ── SEND MESSAGE ───────────────────────────────────────────────
+function sendMsg() {
+  const input = document.getElementById('msg-input');
+  const text = input.value.trim();
+  if (!text) return;
+
+  const c = CONVERSATIONS.find(x => x.id === activeConv);
+  c.messages.push({ from: 'me', text, time: 'Nu', read: false });
+  c.lastMsg = text;
+  c.lastTime = 'Nu';
+
+  input.value = '';
+  autoResize(input);
+
+  // Hide quick replies
+  const qr = document.getElementById('quick-replies');
+  if (qr) qr.style.display = 'none';
+
+  renderConvList();
+  renderChat(activeConv);
+
+  // Simulate reply after 1.5s
+  setTimeout(() => {
+    c.messages.push({ from: 'them', text: 'Fedt! Det lyder godt 😊', time: 'Nu' });
+    c.lastMsg = 'Fedt! Det lyder godt 😊';
+    showTyping = false;
+    renderConvList();
+    renderChat(activeConv);
+  }, 1600);
+}
+
+function sendQuick(btn, text) {
+  const input = document.getElementById('msg-input');
+  input.value = text;
+  sendMsg();
+}
+
+function handleKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendMsg();
+  }
+}
+
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+}
+
+// ── INIT ───────────────────────────────────────────────────────
+renderConvList();
+renderChat(activeConv);
+</script>
+</body>
+</html>
