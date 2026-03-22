@@ -35,15 +35,16 @@
     background: var(--bg);
     color: var(--ink);
     min-height: 100vh;
+    padding-bottom: calc(60px + env(safe-area-inset-bottom, 0px));
   }
 
   /* ── NAV ── */
   nav {
-    position: sticky; top: 0; z-index: 100;
+    z-index: 100;
     background: rgba(247,244,239,0.9);
     backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--border);
-    padding: 0 32px; height: 64px;
+    padding: 0 16px; height: 64px;
     display: flex; align-items: center; justify-content: space-between;
   }
 
@@ -51,7 +52,7 @@
   .nav-logo svg { width: 28px; height: 28px; }
   .nav-logo-text { font-family: 'Fraunces', serif; font-size: 20px; font-weight: 700; color: var(--ink); letter-spacing: -0.3px; }
 
-  .nav-links { display: flex; align-items: center; gap: 4px; }
+  .nav-links { display: none; align-items: center; gap: 4px; }
   .nav-link {
     display: flex; align-items: center; gap: 6px;
     padding: 8px 14px; border-radius: 10px;
@@ -73,17 +74,16 @@
   .page {
     max-width: 1080px;
     margin: 0 auto;
-    padding: 40px 32px 80px;
+    padding: 20px 16px 80px;
     display: grid;
-    grid-template-columns: 300px 1fr;
-    gap: 28px;
+    grid-template-columns: 1fr;
+    gap: 20px;
     align-items: start;
   }
 
   /* ── SIDEBAR ── */
   .sidebar {
-    position: sticky;
-    top: 84px;
+    position: static;
     display: flex;
     flex-direction: column;
     gap: 16px;
@@ -259,7 +259,7 @@
     background: var(--card);
     border-radius: 20px;
     border: 1px solid var(--border);
-    padding: 28px;
+    padding: 20px;
     box-shadow: var(--shadow-sm);
     animation: fadeUp 0.5s ease both;
   }
@@ -282,8 +282,8 @@
   .tags-grid { display: flex; flex-wrap: wrap; gap: 8px; }
   .tag {
     display: inline-flex; align-items: center; gap: 6px;
-    padding: 7px 14px; border-radius: 999px;
-    font-size: 13px; font-weight: 600;
+    padding: 6px 12px; border-radius: 999px;
+    font-size: 12px; font-weight: 600;
     background: var(--bg); color: var(--ink2);
     border: 1.5px solid var(--border);
     transition: all 0.2s;
@@ -294,12 +294,12 @@
   /* Photo gallery */
   .gallery {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
     gap: 10px;
   }
   .gallery-main {
     grid-column: 1 / -1;
-    height: 220px;
+    height: 180px;
     border-radius: 14px;
     overflow: hidden;
     background: var(--bg);
@@ -334,7 +334,7 @@
   /* Compatibility breakdown */
   .compat-grid { display: flex; flex-direction: column; gap: 12px; }
   .compat-row { display: flex; align-items: center; gap: 14px; }
-  .compat-label { font-size: 13px; font-weight: 600; color: var(--ink2); width: 130px; flex-shrink: 0; }
+  .compat-label { font-size: 13px; font-weight: 600; color: var(--ink2); width: 110px; flex-shrink: 0; }
   .compat-bar-wrap { flex: 1; height: 8px; background: var(--border); border-radius: 999px; overflow: hidden; }
   .compat-bar { height: 100%; border-radius: 999px; background: var(--accent); transition: width 1.2s cubic-bezier(0.22,1,0.36,1); }
   .compat-bar.medium { background: var(--primary); }
@@ -361,9 +361,9 @@
   .demo-bar {
     background: var(--gold-soft);
     border: 1px solid rgba(201,168,76,0.3);
-    border-radius: 12px; padding: 12px 16px;
+    border-radius: 12px; padding: 10px 14px;
     display: flex; align-items: center; gap: 10px;
-    font-size: 13px; color: var(--ink2);
+    font-size: 12px; color: var(--ink2);
     margin-bottom: 28px;
   }
   .demo-bar .material-symbols-rounded { font-size: 18px; color: var(--gold); flex-shrink: 0; }
@@ -379,11 +379,77 @@
   .back-link:hover { color: var(--ink); }
   .back-link .material-symbols-rounded { font-size: 18px; }
 
-  @media (max-width: 768px) {
-    .page { grid-template-columns: 1fr; padding: 24px 16px 60px; }
-    .sidebar { position: static; }
-    nav { padding: 0 16px; }
-    .nav-links { display: none; }
+  /* Gallery */
+  .gallery-cam {
+    font-size: 44px;
+    color: rgba(26,15,10,0.18);
+    pointer-events: none;
+  }
+  .gallery-hover {
+    position: absolute; inset: 0;
+    background: rgba(26,15,10,0);
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 14px;
+    transition: background 0.22s ease;
+  }
+  .gallery-thumb .gallery-hover { border-radius: 12px; }
+  .gallery-hover .material-symbols-rounded {
+    font-size: 30px; color: white; opacity: 0;
+    transition: opacity 0.22s ease;
+  }
+  .gallery-main:hover .gallery-hover,
+  .gallery-thumb:hover .gallery-hover { background: rgba(26,15,10,0.32); }
+  .gallery-main:hover .gallery-hover .material-symbols-rounded,
+  .gallery-thumb:hover .gallery-hover .material-symbols-rounded { opacity: 1; }
+
+  .gallery-all-btn {
+    width: 100%; margin-top: 12px;
+    padding: 11px 16px;
+    background: var(--bg); border: 1.5px solid var(--border); border-radius: 12px;
+    font-size: 14px; font-weight: 600; color: var(--ink2);
+    cursor: pointer; font-family: 'Manrope', sans-serif;
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+    transition: all 0.2s;
+  }
+  .gallery-all-btn:hover { border-color: var(--ink2); background: var(--card); }
+  .gallery-all-btn .material-symbols-rounded { font-size: 17px; }
+
+  /* Section transitions */
+  #photos-section, #preferences-section {
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+
+  /* ── BUNDMENU ── */
+  .bottomnav {
+    display: flex;
+    position: fixed; bottom: 0; left: 0; right: 0;
+    height: 60px; background: var(--card);
+    border-top: 1px solid var(--border);
+    z-index: 200; box-shadow: 0 -2px 16px rgba(26,15,10,0.07);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  .bn-item {
+    flex: 1; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 2px;
+    text-decoration: none; color: var(--ink3);
+    font-size: 10px; font-weight: 600; font-family: 'Manrope', sans-serif;
+    transition: color 0.2s;
+  }
+  .bn-item .material-symbols-rounded { font-size: 22px; }
+  .bn-item.active { color: var(--primary); }
+
+  @media (min-width: 768px) {
+    nav { position: sticky; top: 0; padding: 0 32px; }
+    .nav-links { display: flex; }
+    body { padding-bottom: 0; }
+    .page { grid-template-columns: 300px 1fr; padding: 40px 32px 80px; gap: 28px; }
+    .sidebar { position: sticky; top: 84px; }
+    .gallery { grid-template-columns: 1fr 1fr; }
+    .gallery-main { height: 220px; }
+    .section { padding: 28px; }
+    .compat-label { width: 130px; }
+    .tag { font-size: 13px; padding: 7px 14px; }
+    .bottomnav { display: none; }
   }
 </style>
 </head>
@@ -399,8 +465,8 @@
     <span class="nav-logo-text">Rumies</span>
   </a>
   <div class="nav-links">
-    <a class="nav-link" href="rumies-matches.html"><span class="material-symbols-rounded">search</span>Søg</a>
-    <a class="nav-link" href="rumies-matches.html"><span class="material-symbols-rounded">favorite</span>Matches</a>
+    <a class="nav-link" href="rumies-landing.html"><span class="material-symbols-rounded">home</span>Hjem</a>
+    <a class="nav-link active" href="rumies-matches.html"><span class="material-symbols-rounded">favorite</span>Matches</a>
     <a class="nav-link" href="rumies-chat.html"><span class="material-symbols-rounded">chat_bubble</span>Beskeder</a>
     <a class="nav-link" href="rumies-dashboard-søgende.html"><span class="material-symbols-rounded">person</span>Profil</a>
   </div>
@@ -601,6 +667,40 @@ Perfekt match er nogen der er ryddelig, respekterer hinandens rytmer og gerne vi
       </div>
     </div>
 
+    <!-- Hvad jeg søger (søgende only) -->
+    <div class="section" id="preferences-section" style="display:none;animation-delay:0.2s">
+      <div class="section-title">
+        <span class="material-symbols-rounded">search</span>
+        Hvad jeg søger
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div style="background:var(--bg);border-radius:12px;padding:12px 14px;border:1px solid var(--border)">
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--ink3);margin-bottom:4px">By</div>
+          <div style="font-size:15px;font-weight:700;color:var(--ink)">København</div>
+          <div style="font-size:11px;color:var(--ink3)">Nørrebro, Vesterbro, Frederiksberg</div>
+        </div>
+        <div style="background:var(--bg);border-radius:12px;padding:12px 14px;border:1px solid var(--border)">
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--ink3);margin-bottom:4px">Budget</div>
+          <div style="font-size:15px;font-weight:700;color:var(--primary)">Op til 7.000 kr/md</div>
+          <div style="font-size:11px;color:var(--ink3)">inkl. forbrug</div>
+        </div>
+        <div style="background:var(--bg);border-radius:12px;padding:12px 14px;border:1px solid var(--border)">
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--ink3);margin-bottom:4px">Indflytning</div>
+          <div style="font-size:15px;font-weight:700;color:var(--ink)">Fra 1. feb 2026</div>
+          <div style="font-size:11px;color:var(--ink3)">fleksibel ±2 uger</div>
+        </div>
+        <div style="background:var(--bg);border-radius:12px;padding:12px 14px;border:1px solid var(--border)">
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--ink3);margin-bottom:4px">Størrelse</div>
+          <div style="font-size:15px;font-weight:700;color:var(--ink)">Min. 12 m²</div>
+          <div style="font-size:11px;color:var(--ink3)">møbleret foretrukket</div>
+        </div>
+      </div>
+      <div style="margin-top:14px;padding:14px 16px;background:var(--accent-soft);border-radius:12px;border:1px solid rgba(123,158,135,0.2)">
+        <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--accent);margin-bottom:6px">Vigtigt for mig</div>
+        <div style="font-size:14px;color:var(--ink2);line-height:1.6">Ikke-ryger hjem · Kæledyr ok · Stille hverdagsaftener · Respekt for hinandens rytmer</div>
+      </div>
+    </div>
+
     <!-- Room photos (udlejer only) -->
     <div class="section" id="photos-section" style="animation-delay:0.2s">
       <div class="section-title">
@@ -608,15 +708,24 @@ Perfekt match er nogen der er ryddelig, respekterer hinandens rytmer og gerne vi
         Billeder af lejligheden
       </div>
       <div class="gallery">
-        <div class="gallery-main" style="background:linear-gradient(135deg,#E8C9BC,#F5DEC0)">
-          🛋️
+        <div class="gallery-main" style="background:linear-gradient(135deg,#E8C9BC,#F5DEC0)" onclick="showToast('🖼️','Billede-visning kommer snart!')">
+          <span class="material-symbols-rounded gallery-cam">photo_camera</span>
+          <div class="gallery-hover"><span class="material-symbols-rounded">zoom_in</span></div>
           <div style="position:absolute;bottom:12px;left:12px;background:rgba(26,15,10,0.6);color:white;font-size:12px;font-weight:600;padding:4px 10px;border-radius:8px">Stuen</div>
         </div>
-        <div class="gallery-thumb" style="background:linear-gradient(135deg,#C8DDD0,#E3EEE7)">🛏️
+        <div class="gallery-thumb" style="background:linear-gradient(135deg,#C8DDD0,#E3EEE7)" onclick="showToast('🖼️','Billede-visning kommer snart!')">
+          <span class="material-symbols-rounded gallery-cam" style="font-size:30px">photo_camera</span>
+          <div class="gallery-hover"><span class="material-symbols-rounded">zoom_in</span></div>
           <div style="position:absolute;bottom:8px;left:8px;background:rgba(26,15,10,0.6);color:white;font-size:11px;font-weight:600;padding:3px 8px;border-radius:6px">Værelse</div>
         </div>
-        <div class="gallery-thumb more-overlay" data-more="+3 billeder" style="background:linear-gradient(135deg,#BED4E8,#D5C8E8)">🍳</div>
+        <div class="gallery-thumb more-overlay" data-more="+3 billeder" style="background:linear-gradient(135deg,#BED4E8,#D5C8E8)" onclick="showToast('🖼️','Billede-visning kommer snart!')">
+          <span class="material-symbols-rounded gallery-cam" style="font-size:30px">photo_camera</span>
+        </div>
       </div>
+      <button class="gallery-all-btn" onclick="showToast('🖼️','Fuld galleri-visning kommer snart!')">
+        <span class="material-symbols-rounded">photo_library</span>
+        Se alle 6 billeder
+      </button>
 
       <!-- Room details -->
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:16px">
@@ -658,6 +767,30 @@ Perfekt match er nogen der er ryddelig, respekterer hinandens rytmer og gerne vi
 </div>
 
 <script>
+// ── SECTION ANIMATION ──────────────────────────────────────────
+function showSection(id) {
+  const el = document.getElementById(id);
+  if (!el || el.style.display !== 'none') return;
+  el.style.display = 'block';
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(10px)';
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    el.style.opacity = '1';
+    el.style.transform = 'translateY(0)';
+  }));
+}
+function hideSection(id) {
+  const el = document.getElementById(id);
+  if (!el || el.style.display === 'none') return;
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(10px)';
+  setTimeout(() => {
+    el.style.display = 'none';
+    el.style.opacity = '';
+    el.style.transform = '';
+  }, 260);
+}
+
 // ── ROLE TOGGLE ────────────────────────────────────────────────
 function setRole(role, btn) {
   document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
@@ -667,7 +800,6 @@ function setRole(role, btn) {
 
   // Role badge
   const badge = document.getElementById('role-badge');
-  const badgeTxt = document.getElementById('role-badge-txt');
   badge.className = `role-badge ${role}`;
   if (isUdlejer) {
     badge.innerHTML = `<span class="material-symbols-rounded">home</span><span id="role-badge-txt">Udlejer</span>`;
@@ -675,8 +807,14 @@ function setRole(role, btn) {
     badge.innerHTML = `<span class="material-symbols-rounded">search</span><span id="role-badge-txt">Søger bolig</span>`;
   }
 
-  // Photos section
-  document.getElementById('photos-section').style.display = isUdlejer ? 'block' : 'none';
+  // Switch sections with animation
+  if (isUdlejer) {
+    showSection('photos-section');
+    hideSection('preferences-section');
+  } else {
+    showSection('preferences-section');
+    hideSection('photos-section');
+  }
 
   // Budget label
   document.getElementById('budget-label').textContent = isUdlejer ? 'Husleje' : 'Budget maks.';
@@ -686,12 +824,6 @@ function setRole(role, btn) {
   document.getElementById('bio-text').textContent = isUdlejer
     ? `Hej! Jeg hedder Sofie og læser cand.merc på CBS. Jeg har et lyst 2-værelses på Nørrebro med et ledigt værelse fra februar.\n\nJeg sætter pris på et rent og hyggeligt hjem, hvor der er plads til begge dele — stille aftener med en bog og kaffe, men også en god snak over aftensmaden. Jeg er tidlig oppe og elsker at lave morgenmad i fred.\n\nPerfekt match er nogen der er ryddelig, respekterer hinandens rytmer og gerne vil bidrage til et godt fællesskab uden at det behøver at være påtvunget.`
     : `Hej! Jeg er Sofie, 24 år og studerende på CBS. Jeg leder efter et værelse i København fra februar — helst Nørrebro, Vesterbro eller Frederiksberg.\n\nJeg er morgenmenneske, ikke-ryger og meget ryddelig. Jeg elsker at lave mad, men er god til at respektere fællesarealer. Vil gerne bo med nogen man kan hygge sig med, men som også forstår at man nogle gange bare vil have fred.\n\nJeg har haft tre positive anmeldelser fra tidligere bofæller — spørg endelig!`;
-
-  // CTA button
-  const cta = document.querySelector('.btn-primary');
-  cta.innerHTML = isUdlejer
-    ? `<span class="material-symbols-rounded">chat_bubble</span>Skriv til Sofie`
-    : `<span class="material-symbols-rounded">chat_bubble</span>Skriv til Sofie`;
 }
 
 // ── ANIMATE MATCH RING ON LOAD ─────────────────────────────────
@@ -747,5 +879,12 @@ setRole('udlejer', document.querySelectorAll('.toggle-btn')[1]);
 animateRing(92);
 animateBars();
 </script>
+
+<nav class="bottomnav">
+  <a class="bn-item" href="rumies-landing.html"><span class="material-symbols-rounded">home</span><span>Hjem</span></a>
+  <a class="bn-item active" href="rumies-matches.html"><span class="material-symbols-rounded">favorite</span><span>Matches</span></a>
+  <a class="bn-item" href="rumies-chat.html"><span class="material-symbols-rounded">chat_bubble</span><span>Beskeder</span></a>
+  <a class="bn-item" href="rumies-dashboard-søgende.html"><span class="material-symbols-rounded">person</span><span>Profil</span></a>
+</nav>
 </body>
 </html>

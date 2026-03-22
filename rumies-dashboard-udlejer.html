@@ -27,19 +27,19 @@
     --shadow-md: 0 4px 20px rgba(26,15,10,0.08);
   }
   * { margin:0; padding:0; box-sizing:border-box; }
-  body { font-family:'Manrope',sans-serif; background:var(--bg); color:var(--ink); min-height:100vh; }
+  body { font-family:'Manrope',sans-serif; background:var(--bg); color:var(--ink); min-height:100vh; padding-bottom:calc(60px + env(safe-area-inset-bottom, 0px)); }
 
   nav {
-    position:sticky; top:0; z-index:100;
+    z-index:100;
     background:rgba(247,244,239,0.95); backdrop-filter:blur(12px);
     border-bottom:1px solid var(--border);
-    padding:0 32px; height:64px;
+    padding:0 16px; height:64px;
     display:flex; align-items:center; justify-content:space-between;
   }
   .nav-logo { display:flex; align-items:center; gap:9px; text-decoration:none; }
   .nav-logo svg { width:28px; height:28px; }
   .nav-logo-text { font-family:'Fraunces',serif; font-size:20px; font-weight:700; color:var(--ink); letter-spacing:-0.3px; }
-  .nav-links { display:flex; align-items:center; gap:4px; }
+  .nav-links { display:none; align-items:center; gap:4px; }
   .nav-link {
     display:flex; align-items:center; gap:6px; padding:8px 14px; border-radius:10px;
     font-size:14px; font-weight:500; color:var(--ink2); cursor:pointer;
@@ -54,7 +54,7 @@
     display:flex; align-items:center; justify-content:center; cursor:pointer;
   }
 
-  .page { max-width:1100px; margin:0 auto; padding:36px 32px 80px; }
+  .page { max-width:1100px; margin:0 auto; padding:20px 16px 80px; }
 
   /* PAGE HEADER */
   .page-header { margin-bottom:32px; }
@@ -64,7 +64,7 @@
   .page-sub { font-size:14px; color:var(--ink3); }
 
   /* STAT CARDS */
-  .stats-row { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:32px; }
+  .stats-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:32px; }
   .stat-card {
     background:var(--card); border-radius:16px; border:1px solid var(--border);
     padding:20px; box-shadow:var(--shadow-sm);
@@ -85,7 +85,7 @@
   .stat-card-icon.gold   .material-symbols-rounded { color:var(--gold); }
   .stat-card-icon.ink    { background:#F0EAE4; }
   .stat-card-icon.ink    .material-symbols-rounded { color:var(--ink2); }
-  .stat-val { font-family:'Fraunces',serif; font-size:28px; font-weight:700; color:var(--ink); line-height:1; margin-bottom:4px; }
+  .stat-val { font-family:'Fraunces',serif; font-size:24px; font-weight:700; color:var(--ink); line-height:1; margin-bottom:4px; }
   .stat-label { font-size:13px; color:var(--ink3); }
   .stat-delta { font-size:12px; font-weight:600; margin-top:6px; display:inline-flex; align-items:center; gap:3px; }
   .stat-delta.up { color:var(--accent); }
@@ -95,7 +95,7 @@
   .apt-card {
     background:var(--card); border-radius:20px; border:1px solid var(--border);
     padding:24px; margin-bottom:28px; box-shadow:var(--shadow-sm);
-    display:flex; gap:24px; align-items:center;
+    display:flex; flex-direction:column; gap:16px;
     animation:fadeUp 0.4s 0.1s ease both;
   }
   .apt-img {
@@ -150,7 +150,7 @@
 
   .interested-card {
     background:var(--card); border-radius:16px; border:1.5px solid var(--border);
-    padding:20px; display:flex; align-items:center; gap:18px;
+    padding:20px; display:flex; flex-wrap:wrap; align-items:center; gap:12px;
     transition:all 0.2s; cursor:default;
     animation:fadeUp 0.4s ease both;
   }
@@ -196,7 +196,7 @@
   .score-ring { width:48px; height:48px; position:relative; }
   .score-ring svg { transform:rotate(-90deg); width:48px; height:48px; }
   .ring-bg   { fill:none; stroke:var(--border); stroke-width:4; }
-  .ring-fill { fill:none; stroke-width:4; stroke-linecap:round; }
+  .ring-fill { fill:none; stroke-width:4; stroke-linecap:round; transition: stroke-dashoffset 1s cubic-bezier(0.22,1,0.36,1); }
   .ring-high   { stroke:var(--accent); }
   .ring-medium { stroke:var(--primary); }
   .ring-num {
@@ -205,7 +205,8 @@
   }
   .score-label { font-size:11px; font-weight:600; color:var(--ink3); }
 
-  .interested-actions { display:flex; flex-direction:column; gap:7px; flex-shrink:0; }
+  .interested-actions { display:flex; flex-direction:column; gap:7px; flex-shrink:0; width:100%; margin-top:4px; }
+  .interested-score { order:-1; }
   .action-btn {
     padding:8px 16px; border-radius:10px; font-size:13px; font-weight:700;
     cursor:pointer; transition:all 0.2s; font-family:'Manrope',sans-serif;
@@ -239,13 +240,37 @@
   }
   .toast.show { transform:translateX(-50%) translateY(0); }
 
-  @media (max-width:768px) {
-    nav { padding:0 16px; }
-    .page { padding:24px 16px 60px; }
-    .stats-row { grid-template-columns:1fr 1fr; }
-    .apt-card { flex-direction:column; }
-    .interested-card { flex-wrap:wrap; }
-    .nav-links { display:none; }
+  /* ── BUNDMENU ── */
+  .bottomnav {
+    display: flex;
+    position: fixed; bottom: 0; left: 0; right: 0;
+    height: 60px; background: var(--card);
+    border-top: 1px solid var(--border);
+    z-index: 200; box-shadow: 0 -2px 16px rgba(26,15,10,0.07);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  .bn-item {
+    flex: 1; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 2px;
+    text-decoration: none; color: var(--ink3);
+    font-size: 10px; font-weight: 600; font-family: 'Manrope', sans-serif;
+    transition: color 0.2s;
+  }
+  .bn-item .material-symbols-rounded { font-size: 22px; }
+  .bn-item.active { color: var(--primary); }
+
+  @media (min-width: 768px) {
+    nav { position:sticky; top:0; padding:0 32px; }
+    .nav-links { display:flex; }
+    body { padding-bottom:0; }
+    .page { padding:36px 32px 80px; }
+    .stats-row { grid-template-columns:repeat(3,1fr); gap:14px; }
+    .stat-val { font-size:28px; }
+    .apt-card { flex-direction:row; gap:24px; align-items:center; }
+    .interested-card { flex-wrap:nowrap; gap:18px; }
+    .interested-actions { width:auto; margin-top:0; }
+    .interested-score { order:0; }
+    .bottomnav { display:none; }
   }
 </style>
 </head>
@@ -260,7 +285,7 @@
     <span class="nav-logo-text">Rumies</span>
   </a>
   <div class="nav-links">
-    <a class="nav-link" href="rumies-matches.html"><span class="material-symbols-rounded">search</span>Søg</a>
+    <a class="nav-link" href="rumies-landing.html"><span class="material-symbols-rounded">home</span>Hjem</a>
     <a class="nav-link" href="rumies-matches.html"><span class="material-symbols-rounded">favorite</span>Matches</a>
     <a class="nav-link" href="rumies-chat.html"><span class="material-symbols-rounded">chat_bubble</span>Beskeder</a>
     <a class="nav-link active" href="rumies-dashboard-udlejer.html"><span class="material-symbols-rounded">person</span>Profil</a>
@@ -430,7 +455,7 @@ function buildCard(p, delay) {
         <svg viewBox="0 0 48 48">
           <circle class="ring-bg"   cx="24" cy="24" r="20"/>
           <circle class="ring-fill ${scoreClass(p.score)}" cx="24" cy="24" r="20"
-            stroke-dasharray="${circ.toFixed(1)}" stroke-dashoffset="${offset.toFixed(1)}"/>
+            stroke-dasharray="${circ.toFixed(1)}" stroke-dashoffset="${circ.toFixed(1)}" data-offset="${offset.toFixed(1)}"/>
         </svg>
         <div class="ring-num">${p.score}%</div>
       </div>
@@ -465,6 +490,7 @@ function render() {
   grid.innerHTML = list.map((p, i) => buildCard(p, i * 0.06)).join('');
   document.getElementById('badge-int').textContent = INTERESTED.filter(p => !dismissed.has(p.id)).length;
   document.getElementById('badge-nye').textContent = INTERESTED.filter(p => p.isNew && !dismissed.has(p.id)).length;
+  animateRings();
 }
 
 function dismiss(id) {
@@ -496,7 +522,23 @@ function toast(icon, msg) {
   toastTimer = setTimeout(() => el.classList.remove('show'), 2800);
 }
 
+function animateRings() {
+  requestAnimationFrame(() => {
+    document.querySelectorAll('[data-offset]').forEach(el => {
+      el.style.strokeDashoffset = el.dataset.offset;
+    });
+  });
+}
+
 render();
+animateRings();
 </script>
+
+<nav class="bottomnav">
+  <a class="bn-item" href="rumies-landing.html"><span class="material-symbols-rounded">home</span><span>Hjem</span></a>
+  <a class="bn-item" href="rumies-matches.html"><span class="material-symbols-rounded">favorite</span><span>Matches</span></a>
+  <a class="bn-item" href="rumies-chat.html"><span class="material-symbols-rounded">chat_bubble</span><span>Beskeder</span></a>
+  <a class="bn-item active" href="rumies-dashboard-udlejer.html"><span class="material-symbols-rounded">person</span><span>Profil</span></a>
+</nav>
 </body>
 </html>

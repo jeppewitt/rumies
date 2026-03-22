@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "Skill(keybindings-help)",
+      "Bash(claude doctor:*)",
+      "Bash(git add:*)"
+    ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 .claude/hooks/check-css-vars.py"
+          }
+        ]
+      }
+    ]
+  }
+}

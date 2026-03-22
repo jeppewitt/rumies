@@ -12,6 +12,7 @@
   :root {
     --bg: #F7F4EF;
     --bg2: #F0EAE2;
+    --card: #FFFFFF;
     --primary: #D97757;
     --primary-hover: #C4633F;
     --primary-light: #F0C4B2;
@@ -38,14 +39,15 @@
     background: var(--bg);
     color: var(--ink);
     min-height: 100vh;
+    padding-bottom: calc(60px + env(safe-area-inset-bottom, 0px));
   }
 
   nav {
-    position: sticky; top: 0; z-index: 100;
+    z-index: 100;
     background: rgba(247,244,239,0.95);
     backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--border);
-    padding: 0 32px; height: 64px;
+    padding: 0 16px; height: 64px;
     display: flex; align-items: center; justify-content: space-between;
   }
 
@@ -60,7 +62,7 @@
     color: var(--ink);
   }
 
-  .nav-links { display: flex; align-items: center; gap: 4px; }
+  .nav-links { display: none; align-items: center; gap: 4px; }
 
   .nav-link {
     display: flex; align-items: center; gap: 6px;
@@ -81,16 +83,16 @@
     cursor: pointer; border: 2px solid var(--border);
   }
 
-  .page { max-width: 1200px; margin: 0 auto; padding: 40px 32px 80px; }
+  .page { max-width: 1200px; margin: 0 auto; padding: 16px 16px 80px; }
 
   .page-header {
-    display: flex; align-items: flex-end; justify-content: space-between;
-    margin-bottom: 32px; flex-wrap: wrap; gap: 16px;
+    display: flex; flex-direction: column; align-items: flex-start; gap: 12px;
+    margin-bottom: 32px;
   }
 
   .page-title {
     font-family: 'Fraunces', serif;
-    font-size: 36px; font-weight: 700; line-height: 1.1;
+    font-size: 24px; font-weight: 700; line-height: 1.1;
   }
   .page-title span { color: var(--primary); font-style: italic; }
   .page-subtitle { font-size: 14px; color: var(--ink3); margin-top: 4px; }
@@ -105,7 +107,7 @@
 
   .tabs {
     display: flex; border-bottom: 1.5px solid var(--border);
-    margin-bottom: 20px;
+    margin-bottom: 20px; overflow-x: auto;
   }
 
   .tab {
@@ -129,8 +131,10 @@
 
   .filter-bar {
     display: flex; align-items: center; gap: 10px;
-    flex-wrap: wrap; margin-bottom: 24px;
+    flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch;
+    padding-bottom: 4px; scrollbar-width: none; margin-bottom: 24px;
   }
+  .filter-bar::-webkit-scrollbar { display: none; }
 
   .filter-chip {
     display: flex; align-items: center; gap: 6px;
@@ -138,7 +142,7 @@
     font-size: 13px; font-weight: 500;
     border: 1.5px solid var(--border); background: var(--white);
     color: var(--ink2); cursor: pointer; transition: all 0.2s;
-    font-family: 'Manrope', sans-serif;
+    font-family: 'Manrope', sans-serif; flex-shrink: 0;
   }
   .filter-chip:hover { border-color: var(--primary); color: var(--primary); }
   .filter-chip.active { background: var(--ink); border-color: var(--ink); color: white; }
@@ -146,8 +150,8 @@
 
   .matches-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 20px;
+    grid-template-columns: 1fr;
+    gap: 14px;
   }
 
   .match-card {
@@ -169,7 +173,7 @@
   .match-card.is-favorite { border-color: var(--gold); }
 
   .card-img {
-    width: 100%; height: 180px;
+    width: 100%; height: 160px;
     position: relative; overflow: hidden;
     display: flex; align-items: center; justify-content: center;
     font-size: 64px;
@@ -183,16 +187,14 @@
   .bg-mint     { background: #C2E0D4; }
 
   .score-badge {
-    position: absolute; bottom: 12px; left: 12px;
-    background: white; border-radius: 12px; padding: 6px 12px;
     display: flex; align-items: center; gap: 6px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    margin-bottom: 10px;
   }
 
   .score-ring { width: 36px; height: 36px; position: relative; }
   .score-ring svg { transform: rotate(-90deg); width: 36px; height: 36px; }
   .score-ring-bg { fill: none; stroke: #F2EDE4; stroke-width: 3; }
-  .score-ring-fill { fill: none; stroke-width: 3; stroke-linecap: round; }
+  .score-ring-fill { fill: none; stroke-width: 3; stroke-linecap: round; transition: stroke-dashoffset 1s cubic-bezier(0.22,1,0.36,1); }
   .score-high   { stroke: #7B9E87; }
   .score-medium { stroke: #D97757; }
   .score-low    { stroke: #C9A84C; }
@@ -272,7 +274,7 @@
   }
 
   .btn-msg {
-    flex: 1; padding: 9px; border-radius: 10px; border: none;
+    flex: 1; padding: 9px; min-height: 44px; border-radius: 10px; border: none;
     background: var(--primary); color: white;
     font-size: 13px; font-weight: 600; cursor: pointer;
     display: flex; align-items: center; justify-content: center; gap: 5px;
@@ -282,7 +284,7 @@
   .btn-msg .material-symbols-rounded { font-size: 16px; }
 
   .btn-profile {
-    padding: 9px 12px; border-radius: 10px;
+    padding: 9px 12px; min-height: 44px; border-radius: 10px;
     border: 1.5px solid var(--border); background: var(--white);
     color: var(--ink2); font-size: 13px; font-weight: 600; cursor: pointer;
     display: flex; align-items: center; justify-content: center; gap: 5px;
@@ -294,8 +296,8 @@
   .premium-banner {
     background: linear-gradient(135deg, var(--ink) 0%, #3D2518 100%);
     border-radius: 16px; padding: 20px 28px;
-    display: flex; align-items: center; justify-content: space-between;
-    gap: 20px; margin-bottom: 28px; flex-wrap: wrap;
+    display: flex; flex-direction: column; align-items: flex-start;
+    gap: 14px; margin-bottom: 28px;
   }
   .premium-banner-left { display: flex; align-items: center; gap: 14px; }
   .premium-icon {
@@ -330,11 +332,37 @@
   }
   .toast.show { transform: translateX(-50%) translateY(0); }
 
-  @media (max-width: 640px) {
-    nav { padding: 0 16px; }
-    .page { padding: 24px 16px 60px; }
-    .page-title { font-size: 26px; }
-    .page-header { flex-direction: column; align-items: flex-start; }
+  /* ── BUNDMENU ── */
+  .bottomnav {
+    display: flex;
+    position: fixed; bottom: 0; left: 0; right: 0;
+    height: 60px; background: var(--card);
+    border-top: 1px solid var(--border);
+    z-index: 200; box-shadow: 0 -2px 16px rgba(26,15,10,0.07);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  .bn-item {
+    flex: 1; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 2px;
+    text-decoration: none; color: var(--ink3);
+    font-size: 10px; font-weight: 600; font-family: 'Manrope', sans-serif;
+    transition: color 0.2s;
+  }
+  .bn-item .material-symbols-rounded { font-size: 22px; }
+  .bn-item.active { color: var(--primary); }
+
+  @media (min-width: 768px) {
+    nav { position: sticky; top: 0; padding: 0 32px; }
+    .nav-links { display: flex; }
+    body { padding-bottom: 0; }
+    .page { padding: 40px 32px 80px; }
+    .page-title { font-size: 36px; }
+    .page-header { flex-direction: row; align-items: flex-end; gap: 16px; }
+    .matches-grid { grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+    .filter-bar { flex-wrap: wrap; overflow: visible; padding-bottom: 0; scrollbar-width: auto; }
+    .card-img { height: 180px; }
+    .bottomnav { display: none; }
+    .premium-banner { flex-direction: row; align-items: center; justify-content: space-between; gap: 20px; }
   }
 </style>
 </head>
@@ -349,7 +377,7 @@
     <span class="nav-logo-text">Rumies</span>
   </a>
   <div class="nav-links">
-    <a class="nav-link active" href="rumies-matches.html"><span class="material-symbols-rounded">search</span>Søg</a>
+    <a class="nav-link" href="rumies-landing.html"><span class="material-symbols-rounded">home</span>Hjem</a>
     <a class="nav-link active" href="rumies-matches.html"><span class="material-symbols-rounded">favorite</span>Matches</a>
     <a class="nav-link" href="rumies-chat.html"><span class="material-symbols-rounded">chat_bubble</span>Beskeder</a>
     <a class="nav-link" href="rumies-dashboard-søgende.html"><span class="material-symbols-rounded">person</span>Profil</a>
@@ -443,19 +471,19 @@ function buildCard(p, delay) {
         <span class="material-symbols-rounded">star</span>
       </button>
       ${p.verified?`<div class="verified-badge"><span class="material-symbols-rounded">verified</span>Verificeret</div>`:''}
+    </div>
+    <div class="card-body">
       <div class="score-badge">
         <div class="score-ring">
           <svg viewBox="0 0 36 36">
             <circle class="score-ring-bg" cx="18" cy="18" r="15"/>
             <circle class="score-ring-fill ${scoreColor(p.score)}" cx="18" cy="18" r="15"
-              stroke-dasharray="${circ.toFixed(2)}" stroke-dashoffset="${offset.toFixed(2)}"/>
+              stroke-dasharray="${circ.toFixed(2)}" stroke-dashoffset="${circ.toFixed(2)}" data-offset="${offset.toFixed(2)}"/>
           </svg>
           <div class="score-number">${p.score}%</div>
         </div>
         <div class="score-label">Match<small>score</small></div>
       </div>
-    </div>
-    <div class="card-body">
       <div class="card-name-row">
         <span class="card-name">${p.name}</span>
         <span class="card-age">${p.age} år</span>
@@ -510,6 +538,7 @@ function render() {
     sub.innerHTML = `Fandt <strong>${list.length} roomie${list.length!==1?'s':''}</strong> der matcher din livsstil`;
   }
   document.getElementById('badge-alle').textContent = PROFILES.length;
+  animateRings();
 }
 
 function toggleFav(e, id) {
@@ -556,7 +585,23 @@ function toast(icon, msg) {
   toastTimer = setTimeout(() => el.classList.remove('show'), 2800);
 }
 
+function animateRings() {
+  requestAnimationFrame(() => {
+    document.querySelectorAll('[data-offset]').forEach(el => {
+      el.style.strokeDashoffset = el.dataset.offset;
+    });
+  });
+}
+
 render();
+animateRings();
 </script>
+
+<nav class="bottomnav">
+  <a class="bn-item" href="rumies-landing.html"><span class="material-symbols-rounded">home</span><span>Hjem</span></a>
+  <a class="bn-item active" href="rumies-matches.html"><span class="material-symbols-rounded">favorite</span><span>Matches</span></a>
+  <a class="bn-item" href="rumies-chat.html"><span class="material-symbols-rounded">chat_bubble</span><span>Beskeder</span></a>
+  <a class="bn-item" href="rumies-dashboard-søgende.html"><span class="material-symbols-rounded">person</span><span>Profil</span></a>
+</nav>
 </body>
 </html>

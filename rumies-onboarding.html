@@ -86,7 +86,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 100px 20px 60px;
+    padding: 72px 16px 40px;
   }
 
   /* SCREEN — each step */
@@ -175,7 +175,7 @@
     background: var(--card);
     border: 2px solid var(--border);
     border-radius: var(--r);
-    padding: 28px 20px;
+    padding: 20px 16px;
     cursor: pointer;
     transition: all 0.2s cubic-bezier(0.22, 1, 0.36, 1);
     text-align: center;
@@ -238,7 +238,7 @@
     background: var(--card);
     border: 2px solid var(--border);
     border-radius: 16px;
-    padding: 16px 20px;
+    padding: 14px 16px;
     display: flex; align-items: center; gap: 16px;
     cursor: pointer;
     transition: all 0.2s cubic-bezier(0.22, 1, 0.36, 1);
@@ -358,7 +358,7 @@
 
   /* BUTTONS */
   .btn-primary {
-    width: 100%; padding: 16px;
+    width: 100%; padding: 16px; min-height: 52px;
     background: var(--primary); color: white;
     border: none; border-radius: 14px;
     font-size: 16px; font-weight: 700;
@@ -425,12 +425,33 @@
   }
   .quiz-category .material-symbols-rounded { font-size: 13px; }
 
-  @media (max-width: 500px) {
-    .role-grid { grid-template-columns: 1fr; }
-    .form-row  { grid-template-columns: 1fr; }
-    .summary-grid { grid-template-columns: 1fr; }
-    .topnav { padding: 16px 20px; }
+  .role-grid { grid-template-columns: 1fr; }
+  .form-row  { grid-template-columns: 1fr; }
+  .summary-grid { grid-template-columns: 1fr; }
+  .topnav { padding: 16px 20px; }
+
+  @media (min-width: 600px) {
+    .stage { padding: 100px 20px 60px; }
+    .role-card { padding: 28px 20px; }
+    .quiz-option { padding: 16px 20px; }
+    .role-grid { grid-template-columns: 1fr 1fr; }
+    .form-row  { grid-template-columns: 1fr 1fr; }
+    .summary-grid { grid-template-columns: 1fr 1fr; }
+    .topnav { padding: 20px 32px; }
   }
+
+  /* VALIDERING */
+  .field-input.error { border-color: #E05252 !important; box-shadow: 0 0 0 3px rgba(224,82,82,0.10) !important; }
+  .error-msg { font-size: 12px; color: #E05252; margin-top: 5px; font-weight: 600; display: none; }
+  .error-msg.show { display: block; }
+
+  /* SUCCESS PULSE */
+  @keyframes successPulse {
+    0%   { box-shadow: 0 0 0 0 rgba(123,158,135,0.5); }
+    70%  { box-shadow: 0 0 0 18px rgba(123,158,135,0); }
+    100% { box-shadow: 0 0 0 0 rgba(123,158,135,0); }
+  }
+  .success-icon.pulsing { animation: successPulse 2s ease-out infinite; }
 </style>
 </head>
 <body>
@@ -531,11 +552,13 @@
         <div class="field-group">
           <label class="field-label">Vejnavn og husnummer</label>
           <input class="field-input" type="text" placeholder="f.eks. Nørrebrogade 42" id="addr-street">
+          <span class="error-msg" id="err-street">Udfyld vejnavn og husnummer</span>
         </div>
         <div class="form-row">
           <div class="field-group">
             <label class="field-label">By</label>
             <input class="field-input" type="text" placeholder="f.eks. København N" id="addr-city">
+            <span class="error-msg" id="err-city">Angiv by</span>
           </div>
           <div class="field-group">
             <label class="field-label">Postnummer</label>
@@ -549,6 +572,7 @@
               <span class="field-prefix-label">kr.</span>
               <input class="field-input" type="number" placeholder="6.500" id="rent" min="1000" max="30000">
             </div>
+            <span class="error-msg" id="err-rent">Angiv husleje (kun tal)</span>
           </div>
         <div class="form-row">
           <div class="field-group">
@@ -557,6 +581,7 @@
               <span class="field-prefix-label" style="left:auto;right:14px;transform:translateY(-50%)">m²</span>
               <input class="field-input" type="number" placeholder="18" id="size-room" min="5" max="100" style="padding-right:44px">
             </div>
+            <span class="error-msg" id="err-sizeroom">Angiv størrelse i m²</span>
           </div>
           <div class="field-group">
             <label class="field-label">Lejlighedens størrelse</label>
@@ -579,7 +604,7 @@
         </div>
       </div>
 
-      <button class="btn-primary" onclick="goToSuccess()">
+      <button class="btn-primary" onclick="validateUdlejer()">
         Opret profil <span class="material-symbols-rounded">check</span>
       </button>
     </div>
@@ -598,6 +623,7 @@
         <div class="field-group">
           <label class="field-label">Hvilken by søger du i?</label>
           <input class="field-input" type="text" placeholder="f.eks. København, Aarhus, Odense..." id="search-city">
+          <span class="error-msg" id="err-scity">Angiv hvilken by du søger i</span>
         </div>
         <div class="form-row">
           <div class="field-group">
@@ -613,6 +639,7 @@
               <span class="field-prefix-label">kr.</span>
               <input class="field-input" type="number" placeholder="7.500" id="budget-max">
             </div>
+            <span class="error-msg" id="err-bmax">Angiv dit højeste budget (kun tal)</span>
           </div>
         </div>
 
@@ -622,10 +649,11 @@
             <input class="field-input" type="date" id="move-date" style="padding-left:44px">
             <span class="material-symbols-rounded" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--ink3);font-size:20px">calendar_today</span>
           </div>
+          <span class="error-msg" id="err-mdate">Vælg en indflytningsdato</span>
         </div>
       </div>
 
-      <button class="btn-primary" onclick="goToSuccess()">
+      <button class="btn-primary" onclick="validateSøgende()">
         Opret profil <span class="material-symbols-rounded">check</span>
       </button>
     </div>
@@ -992,7 +1020,52 @@ function goToSuccess() {
   }).join('');
 
   showScreen('step-success');
+  setTimeout(() => {
+    const icon = document.querySelector('.success-icon');
+    if (icon) icon.classList.add('pulsing');
+  }, 600);
 }
+
+// ── VALIDERING ─────────────────────────────────────────────────
+function validateField(inputId, errId, check) {
+  const input = document.getElementById(inputId);
+  const err   = document.getElementById(errId);
+  const valid = check(input ? input.value : '');
+  if (input) input.classList.toggle('error', !valid);
+  if (err)   err.classList.toggle('show', !valid);
+  return valid;
+}
+
+function validateUdlejer() {
+  let ok = true;
+  ok = validateField('addr-street', 'err-street', v => v.trim().length > 0) & ok;
+  ok = validateField('addr-city',   'err-city',   v => v.trim().length > 0) & ok;
+  ok = validateField('rent',        'err-rent',   v => parseFloat(v) > 0)   & ok;
+  ok = validateField('size-room',   'err-sizeroom',v => parseFloat(v) > 0)  & ok;
+  if (ok) goToSuccess();
+}
+
+function validateSøgende() {
+  let ok = true;
+  ok = validateField('search-city', 'err-scity', v => v.trim().length > 0)  & ok;
+  ok = validateField('budget-max',  'err-bmax',  v => parseFloat(v) > 0)    & ok;
+  ok = validateField('move-date',   'err-mdate', v => v.trim().length > 0)  & ok;
+  if (ok) goToSuccess();
+}
+
+// Clear error on input
+['addr-street','addr-city','rent','size-room','search-city','budget-max','move-date'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) el.addEventListener('input', () => {
+    el.classList.remove('error');
+    const errId = {
+      'addr-street':'err-street','addr-city':'err-city','rent':'err-rent',
+      'size-room':'err-sizeroom','search-city':'err-scity','budget-max':'err-bmax','move-date':'err-mdate'
+    }[id];
+    const err = document.getElementById(errId);
+    if (err) err.classList.remove('show');
+  });
+});
 
 // ── INIT ───────────────────────────────────────────────────────
 renderDots('dots-role', QUIZ.length + 2, 0);
