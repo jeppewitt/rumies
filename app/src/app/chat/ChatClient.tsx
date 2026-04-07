@@ -161,7 +161,7 @@ const CSS = `
   .input-box { flex:1; width:100%; background:var(--bg); border:1.5px solid var(--border); border-radius:20px; padding:11px 52px 11px 18px; font-size:14px; font-family:var(--font-manrope),'Manrope',sans-serif; color:var(--ink); resize:none; outline:none; min-height:44px; max-height:120px; line-height:1.5; transition:border-color 0.2s; }
   .input-box:focus { border-color:var(--primary); background:var(--card); }
   .input-box::placeholder { color:var(--ink3); }
-  .send-btn { position:absolute; right:6px; bottom:6px; width:34px; height:34px; border-radius:50%; background:var(--primary); color:white; border:none; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all 0.2s; }
+  .send-btn { position:absolute; right:6px; top:50%; transform:translateY(-50%); width:34px; height:34px; border-radius:50%; background:var(--primary); color:white; border:none; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:background 0.2s; }
   .send-btn:hover { background:var(--primary-hover); transform:scale(1.05); }
   .send-btn .material-symbols-rounded { font-size:18px; }
   .empty-chat { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px; text-align:center; padding:40px; }
@@ -487,9 +487,6 @@ export default function ChatClient({ conversations, initialMessages, initialConv
                     </div>
                   )}
                   <div className="input-wrap">
-                    <button className="input-btn" title="Vedhæft fil">
-                      <span className="material-symbols-rounded">attach_file</span>
-                    </button>
                     <div className="input-field-wrap">
                       <textarea
                         ref={textareaRef}
