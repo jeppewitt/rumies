@@ -477,15 +477,6 @@ export default function ChatClient({ conversations, initialMessages, initialConv
 
                 {/* INPUT */}
                 <div className="input-area">
-                  {showQuickReplies && (
-                    <div className="quick-replies">
-                      {QUICK_REPLIES.map(r => (
-                        <button key={r} className="quick-reply" onClick={() => sendMessage(r)}>
-                          {r}
-                        </button>
-                      ))}
-                    </div>
-                  )}
                   <div className="input-wrap">
                     <div className="input-field-wrap">
                       <textarea
