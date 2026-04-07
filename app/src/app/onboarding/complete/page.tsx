@@ -11,7 +11,7 @@ export default function OnboardingCompletePage() {
   useEffect(() => {
     async function save() {
       const raw = localStorage.getItem('rumies_pending_quiz')
-      if (!raw) { router.push('/dashboard'); return }
+      if (!raw) { router.push('/onboarding'); return }
 
       let data: OnboardingData
       try { data = JSON.parse(raw) } catch { router.push('/dashboard'); return }
