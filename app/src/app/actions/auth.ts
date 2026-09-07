@@ -3,6 +3,7 @@
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
+import { getSiteUrl } from '@/lib/siteUrl'
 
 export async function signIn(
   _prevState: { error: string } | null,
@@ -42,7 +43,7 @@ export async function signUp(
     email,
     password,
     options: {
-      emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'}/auth/callback`,
+      emailRedirectTo: `${getSiteUrl()}/auth/callback`,
     },
   })
 
@@ -68,7 +69,7 @@ export async function requestPasswordReset(
   const email = formData.get('email') as string
 
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'}/auth/callback?next=/nulstil-adgangskode`,
+    redirectTo: `${getSiteUrl()}/auth/callback?next=/nulstil-adgangskode`,
   })
 
   if (error) return { error: `Fejl: ${error.message}` }

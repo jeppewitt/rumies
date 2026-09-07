@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
+import { DEMO_MODE } from '@/lib/demo'
 
 const CSS = `
   :root {
@@ -202,7 +203,8 @@ const CSS = `
 
 export default async function LandingPage({ searchParams }: { searchParams: Promise<{ preview?: string }> }) {
   const { preview } = await searchParams
-  if (!preview) {
+  const startHref = DEMO_MODE ? '/onboarding' : '/quiz'
+  if (!preview && !DEMO_MODE) {
     const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
     if (user) redirect('/dashboard')
@@ -219,15 +221,18 @@ export default async function LandingPage({ searchParams }: { searchParams: Prom
       {/* NAV */}
       <nav className="topnav">
         <Link className="nav-logo" href="/">
-          <svg viewBox="0 0 28 28" fill="none">
-            <polygon points="14,2 26,24 2,24" fill="#D97757" />
-            <polygon points="14,7 23,22 5,22" fill="#F7F4EF" opacity="0.3" />
+          <svg viewBox="0 0 40 38" fill="none">
+            <polygon points="20,2 38,17 2,17" fill="#D97757" />
+            <rect x="5" y="16" width="30" height="20" rx="2" fill="#D97757" />
+            <circle cx="15" cy="27" r="5.5" fill="#F7F4EF" opacity="0.92" />
+            <circle cx="25" cy="27" r="5.5" fill="#F7F4EF" opacity="0.60" />
+            <path d="M20,22 a5.5,5.5 0 0 1 0,10 a5.5,5.5 0 0 1 0,-10" fill="#F7F4EF" opacity="0.30" />
           </svg>
           <span className="nav-logo-text">Rumies</span>
         </Link>
         <div className="nav-right">
           <Link className="nav-login" href="/login">Log ind</Link>
-          <Link className="nav-cta" href="/signup">Kom i gang</Link>
+          <Link className="nav-cta" href={DEMO_MODE ? startHref : "/signup"}>Kom i gang</Link>
         </div>
       </nav>
 
@@ -238,11 +243,11 @@ export default async function LandingPage({ searchParams }: { searchParams: Prom
             <h1 className="hero-title">Find en roomie du <em>rent faktisk</em> kan lide at bo med</h1>
             <p className="hero-sub">Rumies matcher dig med kommende roomies baseret på livsstil, søvnvaner og hverdagsrytme — ikke bare et tilfældigt Facebook-opslag.</p>
             <div className="hero-actions">
-              <Link className="btn-hero-primary" href="/quiz">
+              <Link className="btn-hero-primary" href={startHref}>
                 <span className="material-symbols-rounded">arrow_forward</span>
                 Opret gratis profil
               </Link>
-              <Link className="btn-hero-secondary" href="/login">
+              <Link className="btn-hero-secondary" href={DEMO_MODE ? startHref : "/login"}>
                 <span className="material-symbols-rounded">play_circle</span>
                 Se hvordan det virker
               </Link>
@@ -366,7 +371,7 @@ export default async function LandingPage({ searchParams }: { searchParams: Prom
         <div className="cta-inner">
           <h2 className="cta-title">Klar til at finde din næste <em>roomie?</em></h2>
           <p className="cta-sub">Opret din gratis profil på under 5 minutter og se hvem der matcher din livsstil i dag.</p>
-          <Link className="cta-btn" href="/quiz">
+          <Link className="cta-btn" href={startHref}>
             <span className="material-symbols-rounded">arrow_forward</span>
             Kom i gang — det er gratis
           </Link>
@@ -378,9 +383,12 @@ export default async function LandingPage({ searchParams }: { searchParams: Prom
       <footer>
         <div className="footer-inner">
           <Link className="footer-logo" href="/">
-            <svg viewBox="0 0 28 28" fill="none" width="22" height="22">
-              <polygon points="14,2 26,24 2,24" fill="#D97757" />
-              <polygon points="14,7 23,22 5,22" fill="#F7F4EF" opacity="0.3" />
+            <svg viewBox="0 0 40 38" fill="none" width="22" height="21">
+              <polygon points="20,2 38,17 2,17" fill="#D97757" />
+              <rect x="5" y="16" width="30" height="20" rx="2" fill="#D97757" />
+              <circle cx="15" cy="27" r="5.5" fill="#F7F4EF" opacity="0.92" />
+              <circle cx="25" cy="27" r="5.5" fill="#F7F4EF" opacity="0.60" />
+              <path d="M20,22 a5.5,5.5 0 0 1 0,10 a5.5,5.5 0 0 1 0,-10" fill="#F7F4EF" opacity="0.30" />
             </svg>
             <span className="footer-logo-text">Rumies</span>
           </Link>

@@ -1,7 +1,11 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
+import { DEMO_MODE } from '@/lib/demo'
 
 export async function proxy(request: NextRequest) {
+  // Demo: ingen auth-tjek, ingen Supabase-kald
+  if (DEMO_MODE) return NextResponse.next({ request })
+
   let supabaseResponse = NextResponse.next({ request })
 
   const supabase = createServerClient(

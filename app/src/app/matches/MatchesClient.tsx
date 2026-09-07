@@ -295,9 +295,12 @@ export default function MatchesClient({
         {/* NAV */}
         <nav className="mc-nav">
           <a className="nav-logo" href="/matches">
-            <svg viewBox="0 0 28 28" fill="none">
-              <polygon points="14,2 26,24 2,24" fill="#D97757" />
-              <polygon points="14,7 23,22 5,22" fill="#F7F4EF" opacity="0.3" />
+            <svg viewBox="0 0 40 38" fill="none">
+              <polygon points="20,2 38,17 2,17" fill="#D97757" />
+              <rect x="5" y="16" width="30" height="20" rx="2" fill="#D97757" />
+              <circle cx="15" cy="27" r="5.5" fill="#F7F4EF" opacity="0.92" />
+              <circle cx="25" cy="27" r="5.5" fill="#F7F4EF" opacity="0.60" />
+              <path d="M20,22 a5.5,5.5 0 0 1 0,10 a5.5,5.5 0 0 1 0,-10" fill="#F7F4EF" opacity="0.30" />
             </svg>
             <span className="nav-logo-text">Rumies</span>
           </a>
@@ -421,15 +424,21 @@ export default function MatchesClient({
             {list.length === 0 ? (
               <div className="empty-state">
                 <span className="empty-icon">
-                  {activeTab === 'favoritter' ? '⭐' : '🔍'}
+                  {activeTab === 'favoritter' ? '⭐' : cards.length === 0 ? '🏘️' : '🔍'}
                 </span>
                 <div className="empty-title">
-                  {activeTab === 'favoritter' ? 'Ingen favoritter endnu' : 'Ingen matches med dette filter'}
+                  {activeTab === 'favoritter'
+                    ? 'Ingen favoritter endnu'
+                    : cards.length === 0
+                      ? (userRole === 'seeker' ? 'Ingen lejligheder i din by endnu' : 'Ingen søgende i nærheden endnu')
+                      : 'Ingen matches med dette filter'}
                 </div>
                 <div className="empty-sub">
                   {activeTab === 'favoritter'
                     ? 'Tryk på stjerne-ikonet på et kort for at gemme det.'
-                    : 'Prøv at justere dine filtre.'}
+                    : cards.length === 0
+                      ? 'Vi giver dig besked, når der dukker nogen op der matcher dig.'
+                      : 'Prøv at justere dine filtre.'}
                 </div>
               </div>
             ) : (

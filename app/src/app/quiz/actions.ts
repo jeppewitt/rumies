@@ -1,6 +1,7 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
+import { getSiteUrl } from '@/lib/siteUrl'
 
 export async function signUpFromQuiz(email: string, password: string): Promise<{ error: string } | { success: true; needsConfirmation: boolean }> {
   const supabase = await createClient()
@@ -8,7 +9,7 @@ export async function signUpFromQuiz(email: string, password: string): Promise<{
     email,
     password,
     options: {
-      emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'}/auth/callback?next=/onboarding/complete`,
+      emailRedirectTo: `${getSiteUrl()}/auth/callback?next=/onboarding/complete`,
     },
   })
   if (error) {

@@ -1,12 +1,23 @@
+import { Suspense } from 'react'
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import OnboardingClient from './OnboardingClient'
+import { DEMO_MODE } from '@/lib/demo'
 
 export default async function OnboardingPage({
   searchParams,
 }: {
   searchParams: Promise<{ preview?: string }>
 }) {
+  // Demo: ingen login og ingen profil-tjek — flowet kører rent lokalt
+  if (DEMO_MODE) {
+    return (
+      <Suspense fallback={null}>
+        <OnboardingClient userId="demo" />
+      </Suspense>
+    )
+  }
+
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
@@ -24,5 +35,9 @@ export default async function OnboardingPage({
     if (profile) redirect('/dashboard')
   }
 
-  return <OnboardingClient userId={user.id} />
+  return (
+    <Suspense fallback={null}>
+      <OnboardingClient userId={user.id} />
+    </Suspense>
+  )
 }

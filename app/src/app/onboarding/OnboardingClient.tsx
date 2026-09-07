@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { saveOnboarding } from './actions'
 import { uploadListingImages } from '@/lib/supabase/uploadListingImages'
 import { uploadAvatar } from '@/lib/supabase/uploadAvatar'
+import { DEMO_MODE } from '@/lib/demo'
 
 // ── QUIZ DATA ──────────────────────────────────────────────────
 const QUIZ = [
@@ -458,7 +459,7 @@ export default function OnboardingClient({ userId }: { userId: string }) {
 
   // Hvis brugeren har gennemført quiz men ikke fået gemt endnu → send til complete
   useEffect(() => {
-    if (!isPreview && typeof window !== 'undefined' && localStorage.getItem('rumies_pending_quiz')) {
+    if (!isPreview && !DEMO_MODE && typeof window !== 'undefined' && localStorage.getItem('rumies_pending_quiz')) {
       router.replace('/onboarding/complete')
     }
   }, [router, isPreview])
@@ -593,6 +594,11 @@ export default function OnboardingClient({ userId }: { userId: string }) {
   function submitData() {
     if (!role) return
     setServerError(null)
+    // Demo: intet gemmes — flowet slutter på success-skærmen
+    if (DEMO_MODE) {
+      setSaveSuccess(true)
+      return
+    }
     const data = mapQuizToData(quizAnswers, role, info)
     startTransition(async () => {
       let imageUrls: string[] | undefined
@@ -649,9 +655,12 @@ export default function OnboardingClient({ userId }: { userId: string }) {
         {/* TOP NAV */}
         <nav className="topnav">
           <a className="logo" href="/">
-            <svg viewBox="0 0 28 28" fill="none">
-              <polygon points="14,2 26,24 2,24" fill="#D97757"/>
-              <polygon points="14,7 23,22 5,22" fill="#F7F4EF" opacity="0.3"/>
+            <svg viewBox="0 0 40 38" fill="none">
+              <polygon points="20,2 38,17 2,17" fill="#D97757"/>
+              <rect x="5" y="16" width="30" height="20" rx="2" fill="#D97757"/>
+              <circle cx="15" cy="27" r="5.5" fill="#F7F4EF" opacity="0.92"/>
+              <circle cx="25" cy="27" r="5.5" fill="#F7F4EF" opacity="0.60"/>
+              <path d="M20,22 a5.5,5.5 0 0 1 0,10 a5.5,5.5 0 0 1 0,-10" fill="#F7F4EF" opacity="0.30"/>
             </svg>
             <span className="logo-text">Rumies</span>
           </a>
@@ -1065,10 +1074,10 @@ export default function OnboardingClient({ userId }: { userId: string }) {
 
                   <button
                     className="btn-primary"
-                    onClick={() => { if (saveSuccess) router.push('/dashboard') }}
+                    onClick={() => { if (saveSuccess) router.push(DEMO_MODE ? '/' : '/dashboard') }}
                     disabled={isPending || (!saveSuccess && !serverError)}
                   >
-                    {isPending ? 'Gemmer din profil...' : saveSuccess ? 'Gå til dit dashboard' : serverError ? 'Gem mislykkedes' : 'Gemmer...'}
+                    {isPending ? 'Gemmer din profil...' : saveSuccess ? (DEMO_MODE ? 'Tilbage til forsiden' : 'Gå til dit dashboard') : serverError ? 'Gem mislykkedes' : 'Gemmer...'}
                     {!isPending && saveSuccess && <span className="material-symbols-rounded">arrow_forward</span>}
                   </button>
                   <div className="trust-line" style={{ marginTop: 16 }}>

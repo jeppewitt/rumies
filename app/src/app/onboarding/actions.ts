@@ -37,6 +37,13 @@ export async function saveOnboarding(data: OnboardingData): Promise<{ error: str
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return redirect('/login') as never
 
+  // Tjek om profil allerede eksisterer (til rollback ved fejl)
+  const { data: existingProfile } = await supabase
+    .from('profiles')
+    .select('id')
+    .eq('user_id', user.id)
+    .maybeSingle()
+
   const { data: profile, error: profileError } = await supabase
     .from('profiles')
     .upsert({
@@ -73,6 +80,10 @@ export async function saveOnboarding(data: OnboardingData): Promise<{ error: str
 
   if (quizError) {
     console.error('[onboarding quiz]', quizError)
+    // Slet nyoprettet profil så brugeren kan prøve igen fra bunden
+    if (!existingProfile) {
+      await supabase.from('profiles').delete().eq('id', profile.id)
+    }
     return { error: `Quiz: ${quizError.message} (code: ${quizError.code})` }
   }
 

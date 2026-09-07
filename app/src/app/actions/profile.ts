@@ -3,6 +3,8 @@
 import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
 
+const VALID_CITIES = ['København', 'Aarhus', 'Odense']
+
 export async function toggleSearchActive(isActive: boolean) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
@@ -31,6 +33,11 @@ export async function createListing(data: {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return { error: 'Ikke logget ind' }
+
+  if (!VALID_CITIES.includes(data.city)) return { error: 'Ugyldig by' }
+  if (!data.price || data.price <= 0) return { error: 'Husleje skal være større end 0' }
+  if (!data.sizeM2 || data.sizeM2 <= 0) return { error: 'Areal skal være større end 0' }
+  if (data.roomSizeM2 !== null && data.roomSizeM2 <= 0) return { error: 'Størrelse på værelse skal være større end 0' }
 
   const { data: existing } = await supabase
     .from('listings')
@@ -71,6 +78,9 @@ export async function updateSeekerPrefs(data: {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return { error: 'Ikke logget ind' }
 
+  if (!VALID_CITIES.includes(data.city)) return { error: 'Ugyldig by' }
+  if (data.budgetMax !== null && data.budgetMax <= 0) return { error: 'Budget skal være større end 0' }
+
   const { data: profile } = await supabase
     .from('profiles')
     .update({ city: data.city, district: data.district })
@@ -104,6 +114,11 @@ export async function updateListing(listingId: string, data: {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return { error: 'Ikke logget ind' }
+
+  if (!VALID_CITIES.includes(data.city)) return { error: 'Ugyldig by' }
+  if (data.price !== null && data.price <= 0) return { error: 'Husleje skal være større end 0' }
+  if (data.sizeM2 !== null && data.sizeM2 <= 0) return { error: 'Areal skal være større end 0' }
+  if (data.roomSizeM2 !== null && data.roomSizeM2 <= 0) return { error: 'Størrelse på værelse skal være større end 0' }
 
   const title = data.street
     ? `${data.street}, ${data.district || data.city}`
